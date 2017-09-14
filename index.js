@@ -25,6 +25,6 @@
 
 module.exports = {
     PxEnforcer: require('./lib/pxenforcer'),
-    client: require('./lib/pxclient'),
+    PxClient: require('./lib/pxclient'),
     request: require('./lib/request')
 };
