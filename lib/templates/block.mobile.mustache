@@ -84,7 +84,7 @@
   </style>
   <!-- Custom CSS -->
   {{# cssRef }}
-    <link rel="stylesheet" type="text/css" href="{{cssRef}}" />
+    <link rel="stylesheet" type="text/css" href="{{ . }}" />
   {{/ cssRef }}
   </head>
   <body>
@@ -125,22 +125,9 @@
         </div>
       </div>
     </section>
-    <!-- Px -->
-    <script>
-      (
-        function (){
-        window._pxAppId = '{{appId}}';
-        var p = document.getElementsByTagName("script")[0], s = document.createElement("script");
-
-        s.async = 1;
-        s.src = '//client.perimeterx.net/{{appId}}/main.min.js';
-        p.parentNode.insertBefore(s, p);
-       } ()
-      );
-    </script>
     <!-- Custom Script -->
     {{# jsRef }}
-      <script src="{{jsRef}}"></script>
+      <script src="{{ . }}"></script>
     {{/ jsRef }}
   </body>
 </html>
