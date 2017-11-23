@@ -141,41 +141,52 @@
         </div>
       </div>
     </section>
-    <!-- Px -->
-    <script>
-      (
-        function (){
-        window._pxAppId = '{{appId}}';
-        var p = document.getElementsByTagName("script")[0], s = document.createElement("script");
-
-        s.async = 1;
-        s.src = '//client.perimeterx.net/{{appId}}/main.min.js';
-        p.parentNode.insertBefore(s, p);
-       } ()
-      );
-    </script>
     <!-- Captcha -->
-     <script>
-          window.px_vid = '{{vid}}' || '';
-          function handleCaptcha(response){
-            var vid = '{{vid}}' || '';
-            var uuid = '{{uuid}}' || '';
-            var name = "_pxCaptcha";
+    <script>
+            function captchaSolved(res) {
+                window.location.href = '/px/captcha_callback?status=' + res.status;
+            }
 
-            var expiryUtc = new Date(Date.now()+1000).toUTCString();
-
-            var cookieParts = [
-              name,
-              "=",
-              btoa(JSON.stringify({r:response, v:vid, u:uuid})),
-              "; expires=",
-              expiryUtc,
-              "; path=/"
-            ];
-
-            document.cookie = cookieParts.join("");
-            location.reload();
-          }
+            function handleCaptcha(response) {
+                var appId = '{{appId}}';
+                var vid = '{{vid}}';
+                var uuid = '{{uuid}}';
+                var collectorUrl = '{{{hostUrl}}}';
+                var req = new XMLHttpRequest();
+                req.open('POST', collectorUrl + '/api/v1/collector/captcha');
+                req.setRequestHeader('Content-Type', 'application/json');
+                req.addEventListener('error', function() {
+                    captchaSolved({
+                        status: 1
+                    });
+                });
+                req.addEventListener('cancel', function() {
+                    captchaSolved({
+                        status: 2
+                    });
+                });
+                req.addEventListener('load', function() {
+                    if (req.status == 200) {
+                        try {
+                            var responseJSON = JSON.parse(req.responseText);
+                            return captchaSolved(responseJSON);
+                        } catch (ex) {}
+                    }
+                    captchaSolved({
+                        status: 3
+                    });
+                });
+                req.send(JSON.stringify({
+                    appId: appId,
+                    uuid: uuid,
+                    vid: vid,
+                    pxCaptcha: response,
+                    hostname: window.location.hostname,
+                    request: {
+                        url: window.location.href
+                    }
+                }));
+            }
         </script>
     <!-- Custom Script -->
     {{#jsRef}}
