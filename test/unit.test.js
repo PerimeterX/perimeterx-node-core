@@ -4,9 +4,11 @@ const should = require('should');
 const sinon = require('sinon');
 const rewire = require("rewire");
 const pxutil = require('../lib/pxutil');
+const request = require('../lib/request');
 const pxhttpc = require('../lib/pxhttpc');
 const pxapi = rewire('../lib/pxapi');
 const PxClient = rewire('../lib/pxclient');
+const PxEnforcer = require('../lib/pxenforcer')
 const originalTokenValidator = require('../lib/pxoriginaltoken');
 
 describe('PX Utils - pxutils.js', () => {
@@ -141,6 +143,7 @@ describe('PX Configurations - pxconfig.js', () => {
 describe('PX API - pxapi.js', () => {
     let params;
     let config;
+    let stub;
     beforeEach(() => {
         params = {
             pxAppId: 'PX_APP_ID',
@@ -155,12 +158,17 @@ describe('PX API - pxapi.js', () => {
 
         let pxconfig = require('../lib/pxconfig');
         config = pxconfig.mergeDefaults(params);
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback(data)
+        });
+    });
+
+    afterEach(() => {
+        stub.restore();
     });
     it('should add px_orig_cookie to risk_api when decryption fails', (done) => {
         //Stubbing the pxhttpc callServer functions
-        sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
-            return callback(data)
-        });
+        
 
         //Using rewire to get callServer function
         var pxApiCallServerFunc = pxapi.__get__('callServer');
@@ -259,3 +267,124 @@ describe('PX API - pxapi.js', () => {
         done();
     })
 });
+
+describe('PX Enforcer - pxenforcer.js', () => {
+    let params, enforcer, req, stub;
+    beforeEach(() => {
+        params = {
+            pxAppId: 'PX_APP_ID',
+            cookieSecretKey: 'kabum',
+            authToken: 'PX_AUTH_TOKEN',
+            sendPageActivities: true,
+            blockingScore: 60,
+            debugMode: true,
+            ipHeader: 'x-px-true-ip',
+            maxBufferLength: 1,
+            enableModule: true,
+            moduleMode: 1
+        };
+        
+
+        req = {};
+        req.headers = {};
+        req.cookies = {};
+        
+        req.originalUrl = "/";
+        req.path = req.originalUrl.substring(req.originalUrl.lastIndexOf('/'));
+        req.protocol = 'http';
+        req.ip = '1.2.3.4';
+        req.hostname = 'example.com'
+        req.get = (key) => {
+            return req.headers[key] || '';
+        };
+
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(data) : '';
+        });
+    });
+
+    afterEach(() => {
+        stub.restore();
+    });
+
+    it ('enforces a call in a disabled module', (done) => {
+        params.enableModule = false;
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (response) => {
+
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+
+    it ('enforces a call in an enabled module', (done) => {
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (response) => {
+
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+    it ('uses first party to get client', (done) => {
+        let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+        })
+        req.originalUrl = "/_APP_ID/init.js";
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (response) => {
+            (response === undefined).should.equal(false);
+            response.body.should.equal("hello buddy");
+            response.headers['x-px-johnny'].should.equal('1')
+            reqStub.restore();
+            done();
+        });
+    });
+    it ('uses first party for xhr post request', (done) => {
+        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+        })
+        req.originalUrl = "/_APP_ID/xhr/something";
+        req.method = "POST";
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (response) => {
+            (response === undefined).should.equal(false);
+            response.body.should.equal("hello buddy");
+            response.headers['x-px-johnny'].should.equal('1')
+            reqStub.restore();
+            done();
+        });
+    });
+    it ('uses first party for xhr get request', (done) => {
+        let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+        })
+        req.originalUrl = "/_APP_ID/xhr/something";
+        req.method = "GET";
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (response) => {
+            (response === undefined).should.equal(false);
+            response.body.should.equal("hello buddy");
+            response.headers['x-px-johnny'].should.equal('1')
+            reqStub.restore();
+            done();
+        });
+    });
+    it ('uses first party with pxvid cookie', (done) => {
+        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+        })
+        req.originalUrl = "/_APP_ID/xhr/something";
+        req.method = "POST";
+        req.cookies['_pxvid'] = "abab-123";
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (response) => {
+            (response === undefined).should.equal(false);
+            response.body.should.equal("hello buddy");
+            response.headers['x-px-johnny'].should.equal('1')
+            reqStub.restore();
+            done();
+        });
+    })
+});
+
+
