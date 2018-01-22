@@ -281,7 +281,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
             ipHeader: 'x-px-true-ip',
             maxBufferLength: 1,
             enableModule: true,
-            moduleMode: 1
+            moduleMode: 1,
+            firstPartyEnabled: true
         };
         
 
