@@ -168,7 +168,7 @@ describe('PX API - pxapi.js', () => {
     });
     it('should add px_orig_cookie to risk_api when decryption fails', (done) => {
         //Stubbing the pxhttpc callServer functions
-        
+
 
         //Using rewire to get callServer function
         var pxApiCallServerFunc = pxapi.__get__('callServer');
@@ -281,14 +281,14 @@ describe('PX Enforcer - pxenforcer.js', () => {
             ipHeader: 'x-px-true-ip',
             maxBufferLength: 1,
             enableModule: true,
-            moduleMode: 1
+            moduleMode: 1,
+            firstPartyEnabled: true
         };
-        
 
         req = {};
         req.headers = {};
         req.cookies = {};
-        
+
         req.originalUrl = "/";
         req.path = req.originalUrl.substring(req.originalUrl.lastIndexOf('/'));
         req.protocol = 'http';
