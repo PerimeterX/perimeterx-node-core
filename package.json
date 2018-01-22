@@ -1,10 +1,11 @@
 {
   "name": "perimeterx-node-core",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "PerimeterX NodeJS shared core for various applications to monitor and block traffic according to PerimeterX risk score",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "cover": "istanbul cover _mocha"
   },
   "keywords": [
     "perimeterx"
@@ -16,10 +17,12 @@
   "author": "Yaron Schwimmer",
   "license": "ISC",
   "dependencies": {
-    "mu2": "^0.5.21"
+    "content-type": "^1.0.4",
+    "mu2": "^0.5.21",
+    "raw-body": "^2.3.2"
   },
   "devDependencies": {
-    "mocha": "^2.4.5",
+    "mocha": "^2.5.3",
     "rewire": "^2.5.2",
     "should": "^8.3.0",
     "sinon": "^2.1.0"

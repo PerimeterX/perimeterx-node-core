@@ -1,2 +1,6 @@
 test/
 dev/
+.idea/
+.vscode/
+.travis.yml
+.DS_Store/

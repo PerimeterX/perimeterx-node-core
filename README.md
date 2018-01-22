@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/PerimeterX/perimeterx-node-core.svg?branch=master)](https://travis-ci.org/PerimeterX/perimeterx-node-core)
+
 ![image](https://media.marketwire.com/attachments/201604/34215_PerimeterX_logo.jpg)
 
 [PerimeterX](http://www.perimeterx.com) Shared base for NodeJS enforcers
@@ -115,3 +117,4 @@ $ npm test
 
 ### Pull Request
 After you have completed the process, create a pull request to the Upstream repository. Please provide a complete and thorough description explaining the changes. Remember this code has to be read by our maintainers, so keep it simple, smart and accurate.
+
