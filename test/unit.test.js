@@ -339,12 +339,13 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it ('uses first party for xhr post request', (done) => {
+    it('uses first party for xhr post request', (done) => {
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         })
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "POST";
+        req.body = "test";
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
@@ -354,12 +355,13 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it ('uses first party for xhr get request', (done) => {
+    it('uses first party for xhr get request', (done) => {
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         })
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "GET";
+        req.body = "test";
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
@@ -376,6 +378,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "POST";
         req.cookies['_pxvid'] = "abab-123";
+        req.body = "test";
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
