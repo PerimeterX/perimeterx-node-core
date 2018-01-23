@@ -325,13 +325,13 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it ('uses first party to get client', (done) => {
+    it('uses first party to get client', (done) => {
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         })
         req.originalUrl = "/_APP_ID/init.js";
         enforcer = new PxEnforcer(params, new PxClient());
-        enforcer.enforce(req, null, (response) => {
+        enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal("hello buddy");
             response.headers['x-px-johnny'].should.equal('1')
@@ -346,7 +346,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "POST";
         enforcer = new PxEnforcer(params, new PxClient());
-        enforcer.enforce(req, null, (response) => {
+        enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal("hello buddy");
             response.headers['x-px-johnny'].should.equal('1')
@@ -361,7 +361,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "GET";
         enforcer = new PxEnforcer(params, new PxClient());
-        enforcer.enforce(req, null, (response) => {
+        enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal("hello buddy");
             response.headers['x-px-johnny'].should.equal('1')
@@ -377,7 +377,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.method = "POST";
         req.cookies['_pxvid'] = "abab-123";
         enforcer = new PxEnforcer(params, new PxClient());
-        enforcer.enforce(req, null, (response) => {
+        enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal("hello buddy");
             response.headers['x-px-johnny'].should.equal('1')
@@ -393,7 +393,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.method = "POST";
         req.body={key: 'value', anotherKey:'anotherValue'};
         enforcer = new PxEnforcer(params, new PxClient());
-        enforcer.enforce(req, null, (response) => {
+        enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal("hello buddy");
             response.headers['x-px-johnny'].should.equal('1')
