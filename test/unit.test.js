@@ -404,6 +404,22 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     })
+    it('uses upper case for xhr', (done) => {
+        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+        })
+        req.originalUrl = "/_APP_ID/XHR/something";
+        req.method = "POST";
+        req.body={key: 'value', anotherKey:'anotherValue'};
+        enforcer = new PxEnforcer(params, new PxClient());
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(false);
+            response.body.should.equal("hello buddy");
+            response.headers['x-px-johnny'].should.equal('1')
+            reqStub.restore();
+            done();
+        });
+    })
 });
 
 
