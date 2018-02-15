@@ -4,3 +4,4 @@ dev/
 .vscode/
 .travis.yml
 .DS_Store/
+coverage/
