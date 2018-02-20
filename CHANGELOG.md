@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [1.2.0] - 2018-02-19
+### Added
+- Added funCaptcha support for mobile
 ### Modified
 - First party mode enabled by default
 - Improved first party mode
 - Update templates to suppor smart snippet
-- Added funCaptcha support for mobile
 
 ## [1.1.4] - 2018-02-15
 ### Fixed
