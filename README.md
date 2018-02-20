@@ -5,7 +5,8 @@
 [PerimeterX](http://www.perimeterx.com) Shared base for NodeJS enforcers
 =============================================================
 
-> Latest stable version: [v1.1.4](https://www.npmjs.com/package/perimeterx-node-core)
+
+> Latest stable version: [v1.2.0](https://www.npmjs.com/package/perimeterx-node-core)
 
 This is a shared base implementation for PerimeterX Express enforcer and future NodeJS enforcers. For a fully functioning implementation example, see the [Node-Express enforcer](https://github.com/PerimeterX/perimeterx-node-express/) implementation.
 
