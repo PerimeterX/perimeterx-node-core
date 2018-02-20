@@ -259,8 +259,13 @@ describe('PX API - pxapi.js', () => {
         pxCtx.originalTokenError.should.equal('decryption_failed');
         done();
     })
-    it('should fail with exception and set originalTokenError to decryption_failed', (done) => {
-        var pxCtx = {};
+    it.only('should fail with exception and set originalTokenError to decryption_failed', (done) => {
+        var pxCtx = {
+            cookies: {
+                _px: 'aaaaa'
+            },
+            originalToken:''
+        };
 
         originalTokenValidator.evalCookie(pxCtx, config);
         pxCtx.originalTokenError.should.equal('decryption_failed');
