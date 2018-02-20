@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Modified
 - First party mode enabled by default
 - Improved first party mode
-- Update templates to suppor smart snippet
+- Update templates to support smart snippet
 
 ## [1.1.4] - 2018-02-15
 ### Fixed
