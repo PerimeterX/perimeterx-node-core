@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [1.2.1] - 2018-02-28
-### Fixes
+### Fixed
 - Sending originial cookie on decryption failed
 
 ## [1.2.0] - 2018-02-19
