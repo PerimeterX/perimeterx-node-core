@@ -171,10 +171,10 @@ describe('PX API - pxapi.js', () => {
 
 
         //Using rewire to get callServer function
-        var pxApiCallServerFunc = pxapi.__get__('callServer');
+        const pxApiCallServerFunc = pxapi.__get__('callServer');
 
         // Prepare pxCtx
-        var pxCtx = {
+        const pxCtx = {
             ip: '1.2.3.4',
             fullUrl: 'stub',
             vid: 'stub',
@@ -184,7 +184,7 @@ describe('PX API - pxapi.js', () => {
             httpVersion: 'stub',
             s2sCallReason: 'cookie_decryption_failed',
             httpMethod: 'stub',
-            cookie: 'abc'
+            getCookie: () => { return 'abc'}
         }
 
         pxApiCallServerFunc(pxCtx, data => {
@@ -194,7 +194,7 @@ describe('PX API - pxapi.js', () => {
     });
 
     it('token v3 - should add originalUuid, vid and decodedOriginalToken to pxCtx when original token decryption succeeds', (done) => {
-        var pxCtx = {
+        const pxCtx = {
             cookies:{
                 _px3:'aaaa'
             },
@@ -208,7 +208,7 @@ describe('PX API - pxapi.js', () => {
         done();
     })
     it('token v3 - should set originalTokenError to decryption_failed on original token decryption fail', (done) => {
-        var pxCtx = {
+        const pxCtx = {
             cookies:{
                 _px3:'aaaa'
             },
@@ -220,7 +220,7 @@ describe('PX API - pxapi.js', () => {
         done();
     })
     it('token v3 - should set originalTokenError to validation_failed on original token validation fail', (done) => {
-        var pxCtx = {
+        const pxCtx = {
             cookies:{
                 _px3:'aaaa'
             },
@@ -234,7 +234,7 @@ describe('PX API - pxapi.js', () => {
         done();
     })
     it('token v1 - should add originalUuid, vid and decodedOriginalToken to pxCtx when original token decryption succeeds', (done) => {
-        var pxCtx = {
+        const pxCtx = {
             cookies:{
                 _px:'aaaa'
             },
@@ -248,7 +248,7 @@ describe('PX API - pxapi.js', () => {
         done();
     })
     it('token v1 - should set originalTokenError to decryption_failed on original token decryption fail', (done) => {
-        var pxCtx = {
+        const pxCtx = {
             cookies:{
                 _px:'aaaa'
             },
@@ -260,7 +260,7 @@ describe('PX API - pxapi.js', () => {
         done();
     })
     it('should fail with exception and set originalTokenError to decryption_failed', (done) => {
-        var pxCtx = {
+        const pxCtx = {
             cookies: {
                 _px: 'aaaaa'
             },
