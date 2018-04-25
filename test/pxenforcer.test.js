@@ -36,12 +36,6 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.get = (key) => {
             return req.headers[key] || '';
         };
-
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
-            data.score = 100;
-            data.action = 'b';
-            return callback ? callback(null, data) : '';
-        });
     });
 
     afterEach(() => {
@@ -49,6 +43,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('enforces a call in a disabled module', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         params.enableModule = false;
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (response) => {
@@ -59,6 +56,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('enforces a call in an enabled module', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (response) => {
 
@@ -68,6 +68,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party to get client', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         });
@@ -83,6 +86,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party for xhr post request', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         });
@@ -100,6 +106,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party for xhr get request', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         });
@@ -117,6 +126,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party with pxvid cookie', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         });
@@ -135,6 +147,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party for xhr and passed trough bodyParser', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         });
@@ -152,6 +167,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses upper case for xhr', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            return callback ? callback(null, data) : '';
+        });
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
         });
@@ -169,6 +187,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('should not use first party paths if originated from mobile', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+            data.score = 100;
+            data.action = 'b';
+            return callback ? callback(null, data) : '';
+        });
         const curParams = Object.assign({
             moduleMode: 1,
             firstPartyEnabled: true
