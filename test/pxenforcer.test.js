@@ -205,7 +205,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new PxEnforcer(curParams, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.action.should.equal("b");
+            response.body.action.should.equal("block");
             reqStub.restore();
             done();
         });
