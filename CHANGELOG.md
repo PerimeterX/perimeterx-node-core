@@ -21,10 +21,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Sending originial cookie on decryption failed
 
-## [1.2.1] - 2018-02-28
-### Fixed
-- Sending originial cookie on decryption failed
-
 ## [1.2.0] - 2018-02-19
 ### Added
 - Added funCaptcha support for mobile
