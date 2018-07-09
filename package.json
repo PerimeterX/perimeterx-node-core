@@ -19,6 +19,7 @@
   "dependencies": {
     "content-type": "^1.0.4",
     "mu2": "^0.5.21",
+    "phin": "^2.9.0",
     "raw-body": "^2.3.2"
   },
   "devDependencies": {
