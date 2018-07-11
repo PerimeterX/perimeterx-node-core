@@ -332,7 +332,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
     it('uses first party to get client', (done) => {
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
         })
         req.originalUrl = "/_APP_ID/init.js";
         enforcer = new PxEnforcer(params, new PxClient());
@@ -346,7 +346,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
     it('uses first party for xhr post request', (done) => {
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
         })
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "POST";
@@ -362,7 +362,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
     it('uses first party for xhr get request', (done) => {
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
         })
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "GET";
@@ -378,7 +378,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
     it ('uses first party with pxvid cookie', (done) => {
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
         })
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "POST";
@@ -395,7 +395,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     })
     it('uses first party for xhr and passed trough bodyParser', (done) => {
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
         })
         req.originalUrl = "/_APP_ID/xhr/something";
         req.method = "POST";
@@ -411,7 +411,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     })
     it('uses upper case for xhr', (done) => {
         let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}}, "hello buddy");
+            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
         })
         req.originalUrl = "/_APP_ID/XHR/something";
         req.method = "POST";
