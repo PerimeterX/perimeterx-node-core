@@ -30,7 +30,7 @@ describe('PX API - pxapi.js', () => {
         let pxconfig = require('../lib/pxconfig');
         pxconfig.init(params, new PxClient());
         config = pxconfig.mergeDefaults(params);
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, ignore, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback(data)
         });
     });
