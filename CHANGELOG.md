@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.4.2] - 2018-07-30
+### Fixed
+- phin callback related issue
+
 ## [1.4.1] - 2018-07-29
 ### Fixed
 - Various fixes regarding page_requested and pass_reason
