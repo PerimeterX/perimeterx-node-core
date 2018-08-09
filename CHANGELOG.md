@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.4.2] - 2018-07-30
 ### Fixed
-- phin callback related issue
-- no activities get sent if customRequestHandler is used
+- Phin callback related issue
+- Better handling of activities when customRequestHandler is used
+- Better error messages for requests
 
 ## [1.4.1] - 2018-07-29
 ### Fixed
