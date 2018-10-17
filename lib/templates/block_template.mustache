@@ -162,7 +162,6 @@
             var suffixIndex = '{{blockScript}}'.indexOf('/captcha.js');
             var temperedBlockScript = '{{blockScript}}'.substring(suffixIndex);
             s.src = '//captcha.px-cdn.net/{{appId}}' + temperedBlockScript;
-            console.log(s.src);
             p.parentNode.insertBefore(s, p);
         };
     }
