@@ -159,9 +159,9 @@
     if ({{firstPartyEnabled}}) {
         s.onerror = function () {
             s = document.createElement('script');
-            var suffixIndex = '{{blockScript}}'.indexOf('/captcha.js');
+            var suffixIndex = '{{blockScript}}'.indexOf('captcha.js');
             var temperedBlockScript = '{{blockScript}}'.substring(suffixIndex);
-            s.src = '//captcha.px-cdn.net/{{appId}}' + temperedBlockScript;
+            s.src = '//captcha.px-cdn.net/{{appId}}/' + temperedBlockScript;
             p.parentNode.insertBefore(s, p);
         };
     }
