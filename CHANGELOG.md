@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2018-10-29
+### Fixed
+- px_cookie_hmac was missing from risk api calls
+- First party captcha fallback
+
+### Added
+- Configurable testing mode
+- New call reason 'no_cookie_key'
+
 ## [1.4.2] - 2018-07-30
 ### Fixed
 - Phin callback related issue
