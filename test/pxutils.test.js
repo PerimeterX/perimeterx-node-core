@@ -35,7 +35,8 @@ describe('PX Utils - pxutils.js', () => {
 
     it('should extract cookie names from the cookie header', (done) => {
         var cookieHeader = '_px3=px3Cookie;tempCookie=CookieTemp; _px7=NotARealCookie';
-        var formattedHeaders = pxutil.extractCookieNames(cookieHeader);
+        const cookies = cookieHeader.split(';');
+        var formattedHeaders = pxutil.extractCookieNames(cookies);
         (Object.prototype.toString.call(formattedHeaders)).should.be.exactly('[object Array]');
         formattedHeaders[0].should.be.exactly('_px3');
         formattedHeaders[1].should.be.exactly('tempCookie');
