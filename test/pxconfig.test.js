@@ -17,7 +17,8 @@ describe('PX Configurations - pxconfig.js', () => {
             blockingScore: 60,
             debugMode: true,
             ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1
+            maxBufferLength: 1,
+            customRequestHandler: null
         };
 
         pxconfig = require('../lib/pxconfig');

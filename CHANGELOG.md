@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2018-10-29
+### Fixed
+- px_cookie_hmac was missing from risk api calls
+- First party captcha fallback
+
+### Added
+- Configurable testing mode
+- New call reason 'no_cookie_key'
+
+## [1.4.2] - 2018-07-30
+### Fixed
+- Phin callback related issue
+- Better handling of activities when customRequestHandler is used
+- Better error messages for requests
+
+## [1.4.1] - 2018-07-29
+### Fixed
+- Various fixes regarding page_requested and pass_reason
+
+## [1.4.0] - 2018-07-11
+### Added
+- Refactored request module to use Phin.js
+
+### Fixed
+- Better handling for custom request handler
+
+## [1.3.2] - 2018-07-09
+### Fixed
+- Error handling for non-response requests
+
+## [1.3.1] - 2018-06-19
+### Fixed
+- Better error handling
+
 ## [1.3.0] - 2018-06-10
 ### Added
 - Advanced Blocking Response
