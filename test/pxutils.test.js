@@ -45,18 +45,21 @@ describe('PX Utils - pxutils.js', () => {
         return done();
     });
 
-    function enrichCustomParameters(params) {
-        params['custom_param1'] = '1'
-        params['custom_param2'] = '5'
-        params['custom'] = '6'
-        return params;
-    }
+
 
     it('should receive custom params function and custom params object and add only 2 of them', (done) => {
         let dict = {};
         pxutil.prepareCustomParams(pxconfig.conf, dict);
         dict['custom_param1'].should.be.exactly('1');
         dict['custom_param2'].should.be.exactly('5');
+        return done();
     });
 
 });
+
+function enrichCustomParameters(params) {
+    params['custom_param1'] = '1'
+    params['custom_param2'] = '5'
+    params['custom'] = '6'
+    return params;
+}
