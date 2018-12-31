@@ -72,7 +72,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
         let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body: "hello buddy"});
+            callback(null, {headers: {'x-px-johnny': '1'}, body: "hello buddy", proxy:''});
         });
         req.originalUrl = "/_APP_ID/init.js";
         enforcer = new PxEnforcer(params, new PxClient());

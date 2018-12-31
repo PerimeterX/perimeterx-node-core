@@ -34,19 +34,6 @@ describe('PX Utils - pxutils.js', () => {
         return done();
     });
 
-    it('should extract cookie names from the cookie header', (done) => {
-        var cookieHeader = '_px3=px3Cookie;tempCookie=CookieTemp; _px7=NotARealCookie';
-        const cookies = cookieHeader.split(';');
-        var formattedHeaders = pxutil.extractCookieNames(cookies);
-        (Object.prototype.toString.call(formattedHeaders)).should.be.exactly('[object Array]');
-        formattedHeaders[0].should.be.exactly('_px3');
-        formattedHeaders[1].should.be.exactly('tempCookie');
-        formattedHeaders[2].should.be.exactly('_px7');
-        return done();
-    });
-
-
-
     it('should receive custom params function and custom params object and add only 2 of them', (done) => {
         let dict = {};
         pxutil.prepareCustomParams(pxconfig.conf, dict);
