@@ -2,7 +2,7 @@
 
 const should = require('should');
 const sinon = require('sinon');
-const rewire = require("rewire");
+const rewire = require('rewire');
 const pxhttpc = require('../lib/pxhttpc');
 const pxapi = rewire('../lib/pxapi');
 const originalTokenValidator = require('../lib/pxoriginaltoken');
@@ -27,11 +27,11 @@ describe('PX API - pxapi.js', () => {
             moduleMode: 1,
         };
 
-        let pxconfig = require('../lib/pxconfig');
+        const pxconfig = require('../lib/pxconfig');
         pxconfig.init(params, new PxClient());
         config = pxconfig.mergeDefaults(params);
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
-            return callback(data)
+            return callback(data);
         });
     });
 
@@ -57,7 +57,7 @@ describe('PX API - pxapi.js', () => {
             s2sCallReason: 'cookie_decryption_failed',
             httpMethod: 'stub',
             getCookie: () => {
-                return 'abc'
+                return 'abc';
             }
         };
 
@@ -72,7 +72,7 @@ describe('PX API - pxapi.js', () => {
             cookies: {
                 _px3: 'aaaa'
             },
-            originalToken: '3:68a1bf96ab3af2e0683a377d332b125dda3e195ee56cf3ce4d61b99cd0860dc6:xTMRZvJnzxM=:1000:0pjajaPCjssb2HjG2436zyFXIvIEbE87nFBrHEQPDRT7fqiQ5RA05+njsLUVpOtdJjLvWNNAlSG70DW2wqWM5VmF9UR420/wxPkx6Ebyz/L9q7Mxk5fcdF8p+dGcMc3uD7Qh8y3WiPSN389cXhfKfMttUABQYvRpOxo7rMC+ngpHEVYg+lfBZCliHB1PZKLy'
+            originalToken: '68a1bf96ab3af2e0683a377d332b125dda3e195ee56cf3ce4d61b99cd0860dc6:xTMRZvJnzxM=:1000:0pjajaPCjssb2HjG2436zyFXIvIEbE87nFBrHEQPDRT7fqiQ5RA05+njsLUVpOtdJjLvWNNAlSG70DW2wqWM5VmF9UR420/wxPkx6Ebyz/L9q7Mxk5fcdF8p+dGcMc3uD7Qh8y3WiPSN389cXhfKfMttUABQYvRpOxo7rMC+ngpHEVYg+lfBZCliHB1PZKLy'
         };
 
         originalTokenValidator.evalCookie(pxCtx, config);
@@ -98,7 +98,7 @@ describe('PX API - pxapi.js', () => {
             cookies: {
                 _px3: 'aaaa'
             },
-            originalToken: '3:68a1bf96ab3af2e0683a377d332b125dda3e195ee56cf3ce4d61b99cd0860dc:xTMRZvJnzxM=:1000:0pjajaPCjssb2HjG2436zyFXIvIEbE87nFBrHEQPDRT7fqiQ5RA05+njsLUVpOtdJjLvWNNAlSG70DW2wqWM5VmF9UR420/wxPkx6Ebyz/L9q7Mxk5fcdF8p+dGcMc3uD7Qh8y3WiPSN389cXhfKfMttUABQYvRpOxo7rMC+ngpHEVYg+lfBZCliHB1PZKLy'
+            originalToken: '68a1bf96ab3af2e0683a377d332b125dda3e195ee56cf3ce4d61b99cd0860dc:xTMRZvJnzxM=:1000:0pjajaPCjssb2HjG2436zyFXIvIEbE87nFBrHEQPDRT7fqiQ5RA05+njsLUVpOtdJjLvWNNAlSG70DW2wqWM5VmF9UR420/wxPkx6Ebyz/L9q7Mxk5fcdF8p+dGcMc3uD7Qh8y3WiPSN389cXhfKfMttUABQYvRpOxo7rMC+ngpHEVYg+lfBZCliHB1PZKLy'
         };
 
         originalTokenValidator.evalCookie(pxCtx, config);
@@ -112,7 +112,7 @@ describe('PX API - pxapi.js', () => {
             cookies: {
                 _px: 'aaaa'
             },
-            originalToken: '3:Gy9z3mQPYNE=:1000:I7A44BXmO5IlgqhXLM5Mmuq4/jESNgse51Zj/l4bpkAaymDQzcrUMHBofVQ8Q9IYfon3bVQn7gHA124xunjlSlPMlj133wuFBzt7r/yJKpcTEex5WBxynCQAXXx8tymeO1gWXLmPchrV93ysxPl/AeV2/ofVN3YzUR/0PQbXB2fzxkPc5bMPdxLMJCrgLtR4msoMGvg9qaiufMFDWWzah1kvUq1Kvrlk3UQm0y6UU1j6GoLHkTSnDBTg3GexETotOoUkM5FYMPZm8TxK0as+mg=='
+            originalToken: 'Gy9z3mQPYNE=:1000:I7A44BXmO5IlgqhXLM5Mmuq4/jESNgse51Zj/l4bpkAaymDQzcrUMHBofVQ8Q9IYfon3bVQn7gHA124xunjlSlPMlj133wuFBzt7r/yJKpcTEex5WBxynCQAXXx8tymeO1gWXLmPchrV93ysxPl/AeV2/ofVN3YzUR/0PQbXB2fzxkPc5bMPdxLMJCrgLtR4msoMGvg9qaiufMFDWWzah1kvUq1Kvrlk3UQm0y6UU1j6GoLHkTSnDBTg3GexETotOoUkM5FYMPZm8TxK0as+mg=='
         };
 
         originalTokenValidator.evalCookie(pxCtx, config);
@@ -144,5 +144,5 @@ describe('PX API - pxapi.js', () => {
         originalTokenValidator.evalCookie(pxCtx, config);
         pxCtx.originalTokenError.should.equal('decryption_failed');
         done();
-    })
+    });
 });
