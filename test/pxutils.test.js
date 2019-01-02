@@ -38,7 +38,9 @@ describe('PX Utils - pxutils.js', () => {
         const dict = {};
         pxutil.prepareCustomParams(pxconfig.conf, dict);
         dict['custom_param1'].should.be.exactly('1');
-        dict['custom_param2'].should.be.exactly('5');
+        dict['custom_param2'].should.be.exactly('2');
+        dict['custom_param10'].should.be.exactly('10');
+        should.not.exist(dict['custom_param11']);
         return done();
     });
 
@@ -46,7 +48,9 @@ describe('PX Utils - pxutils.js', () => {
 
 function enrichCustomParameters(params) {
     params['custom_param1'] = '1';
-    params['custom_param2'] = '5';
+    params['custom_param2'] = '2';
+    params['custom_param10'] = '10';
+    params['custom_param11'] = '11';
     params['custom'] = '6';
     return params;
 }
