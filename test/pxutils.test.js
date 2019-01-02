@@ -1,7 +1,7 @@
 'use strict';
 
 const should = require('should');
-const rewire = require("rewire");
+const rewire = require('rewire');
 const pxutil = require('../lib/pxutil');
 const PxClient = rewire('../lib/pxclient');
 
@@ -18,7 +18,8 @@ describe('PX Utils - pxutils.js', () => {
             blockingScore: 60,
             debugMode: true,
             ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1
+            maxBufferLength: 1,
+            enrichCustomParameters: enrichCustomParameters
         };
 
         pxconfig = require('../lib/pxconfig');
@@ -33,13 +34,23 @@ describe('PX Utils - pxutils.js', () => {
         return done();
     });
 
-    it('should extract cookie names from the cookie header', (done) => {
-        var cookieHeader = '_px3=px3Cookie;tempCookie=CookieTemp; _px7=NotARealCookie';
-        var formattedHeaders = pxutil.extractCookieNames(cookieHeader);
-        (Object.prototype.toString.call(formattedHeaders)).should.be.exactly('[object Array]');
-        formattedHeaders[0].should.be.exactly('_px3');
-        formattedHeaders[1].should.be.exactly('tempCookie');
-        formattedHeaders[2].should.be.exactly('_px7');
+    it('should receive custom params function and custom params object and add only 2 of them', (done) => {
+        const dict = {};
+        pxutil.prepareCustomParams(pxconfig.conf, dict);
+        dict['custom_param1'].should.be.exactly('1');
+        dict['custom_param2'].should.be.exactly('2');
+        dict['custom_param10'].should.be.exactly('10');
+        should.not.exist(dict['custom_param11']);
         return done();
     });
+
 });
+
+function enrichCustomParameters(params) {
+    params['custom_param1'] = '1';
+    params['custom_param2'] = '2';
+    params['custom_param10'] = '10';
+    params['custom_param11'] = '11';
+    params['custom'] = '6';
+    return params;
+}
