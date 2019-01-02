@@ -1,7 +1,7 @@
 'use strict';
 
 const should = require('should');
-const rewire = require("rewire");
+const rewire = require('rewire');
 const PxClient = rewire('../lib/pxclient');
 
 describe('PX Configurations - pxconfig.js', () => {
@@ -28,7 +28,7 @@ describe('PX Configurations - pxconfig.js', () => {
         params.pxAppId = 'PXJWbMQarF';
         pxconfig.init(params, new PxClient());
         const conf = pxconfig.conf;
-        conf.SERVER_HOST.should.be.exactly(`sapi-${params.pxAppId.toLowerCase()}.perimeterx.net`)
+        conf.SERVER_HOST.should.be.exactly(`sapi-${params.pxAppId.toLowerCase()}.perimeterx.net`);
         done();
     });
 

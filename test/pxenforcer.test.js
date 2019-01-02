@@ -2,7 +2,7 @@
 
 const should = require('should');
 const sinon = require('sinon');
-const rewire = require("rewire");
+const rewire = require('rewire');
 const request = require('../lib/request');
 const pxhttpc = require('../lib/pxhttpc');
 const PxClient = rewire('../lib/pxclient');
@@ -28,7 +28,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.headers = {};
         req.cookies = {};
 
-        req.originalUrl = "/";
+        req.originalUrl = '/';
         req.path = req.originalUrl.substring(req.originalUrl.lastIndexOf('/'));
         req.protocol = 'http';
         req.ip = '1.2.3.4';
@@ -71,14 +71,14 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback ? callback(null, data) : '';
         });
-        let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body: "hello buddy", proxy:''});
+        const reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy', proxy:''});
         });
-        req.originalUrl = "/_APP_ID/init.js";
+        req.originalUrl = '/_APP_ID/init.js';
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.should.equal("hello buddy");
+            response.body.should.equal('hello buddy');
             response.headers['x-px-johnny'].should.equal('1');
             reqStub.restore();
             done();
@@ -89,16 +89,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback ? callback(null, data) : '';
         });
-        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
+        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
-        req.originalUrl = "/_APP_ID/xhr/something";
-        req.method = "POST";
-        req.body = "test";
+        req.originalUrl = '/_APP_ID/xhr/something';
+        req.method = 'POST';
+        req.body = 'test';
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.should.equal("hello buddy");
+            response.body.should.equal('hello buddy');
             response.headers['x-px-johnny'].should.equal('1');
             reqStub.restore();
             done();
@@ -109,16 +109,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback ? callback(null, data) : '';
         });
-        let reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body: "hello buddy"});
+        const reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy'});
         });
-        req.originalUrl = "/_APP_ID/xhr/something";
-        req.method = "GET";
-        req.body = "test";
+        req.originalUrl = '/_APP_ID/xhr/something';
+        req.method = 'GET';
+        req.body = 'test';
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.should.equal("hello buddy");
+            response.body.should.equal('hello buddy');
             response.headers['x-px-johnny'].should.equal('1');
             reqStub.restore();
             done();
@@ -129,17 +129,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback ? callback(null, data) : '';
         });
-        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
+        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
-        req.originalUrl = "/_APP_ID/xhr/something";
-        req.method = "POST";
-        req.cookies['_pxvid'] = "abab-123";
-        req.body = "test";
+        req.originalUrl = '/_APP_ID/xhr/something';
+        req.method = 'POST';
+        req.cookies['_pxvid'] = 'abab-123';
+        req.body = 'test';
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.should.equal("hello buddy");
+            response.body.should.equal('hello buddy');
             response.headers['x-px-johnny'].should.equal('1');
             reqStub.restore();
             done();
@@ -150,16 +150,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback ? callback(null, data) : '';
         });
-        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
+        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
-        req.originalUrl = "/_APP_ID/xhr/something";
-        req.method = "POST";
+        req.originalUrl = '/_APP_ID/xhr/something';
+        req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.should.equal("hello buddy");
+            response.body.should.equal('hello buddy');
             response.headers['x-px-johnny'].should.equal('1');
             reqStub.restore();
             done();
@@ -170,16 +170,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
             return callback ? callback(null, data) : '';
         });
-        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
+        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
-        req.originalUrl = "/_APP_ID/XHR/something";
-        req.method = "POST";
+        req.originalUrl = '/_APP_ID/XHR/something';
+        req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
         enforcer = new PxEnforcer(params, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.should.equal("hello buddy");
+            response.body.should.equal('hello buddy');
             response.headers['x-px-johnny'].should.equal('1');
             reqStub.restore();
             done();
@@ -196,21 +196,20 @@ describe('PX Enforcer - pxenforcer.js', () => {
             moduleMode: 1,
             firstPartyEnabled: true
         }, params);
-        let reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:"hello buddy"});
+        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
         req.headers = {'x-px-authorization': '3:some-fake-cookie'};
-        req.method = "POST";
+        req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
         enforcer = new PxEnforcer(curParams, new PxClient());
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            response.body.action.should.equal("block");
+            response.body.action.should.equal('block');
             reqStub.restore();
             done();
         });
     });
 
 });
-
 

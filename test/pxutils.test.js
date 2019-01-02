@@ -1,7 +1,7 @@
 'use strict';
 
 const should = require('should');
-const rewire = require("rewire");
+const rewire = require('rewire');
 const pxutil = require('../lib/pxutil');
 const PxClient = rewire('../lib/pxclient');
 
@@ -35,7 +35,7 @@ describe('PX Utils - pxutils.js', () => {
     });
 
     it('should receive custom params function and custom params object and add only 2 of them', (done) => {
-        let dict = {};
+        const dict = {};
         pxutil.prepareCustomParams(pxconfig.conf, dict);
         dict['custom_param1'].should.be.exactly('1');
         dict['custom_param2'].should.be.exactly('5');
@@ -45,8 +45,8 @@ describe('PX Utils - pxutils.js', () => {
 });
 
 function enrichCustomParameters(params) {
-    params['custom_param1'] = '1'
-    params['custom_param2'] = '5'
-    params['custom'] = '6'
+    params['custom_param1'] = '1';
+    params['custom_param2'] = '5';
+    params['custom'] = '6';
     return params;
 }

@@ -2,7 +2,7 @@
 
 const should = require('should');
 const sinon = require('sinon');
-const rewire = require("rewire");
+const rewire = require('rewire');
 const pxhttpc = require('../lib/pxhttpc');
 const pxapi = rewire('../lib/pxapi');
 const originalTokenValidator = require('../lib/pxoriginaltoken');
@@ -27,11 +27,11 @@ describe('PX API - pxapi.js', () => {
             moduleMode: 1,
         };
 
-        let pxconfig = require('../lib/pxconfig');
+        const pxconfig = require('../lib/pxconfig');
         pxconfig.init(params, new PxClient());
         config = pxconfig.mergeDefaults(params);
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
-            return callback(data)
+            return callback(data);
         });
     });
 
@@ -57,7 +57,7 @@ describe('PX API - pxapi.js', () => {
             s2sCallReason: 'cookie_decryption_failed',
             httpMethod: 'stub',
             getCookie: () => {
-                return 'abc'
+                return 'abc';
             }
         };
 
@@ -144,5 +144,5 @@ describe('PX API - pxapi.js', () => {
         originalTokenValidator.evalCookie(pxCtx, config);
         pxCtx.originalTokenError.should.equal('decryption_failed');
         done();
-    })
+    });
 });
