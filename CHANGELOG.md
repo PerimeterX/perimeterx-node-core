@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.7.0] - 2018-01-11
+### Fixed
+- Full refactor of proxy support
+- Lowercasing of json response
+- Various PXHD related issues
+
 ## [1.6.1] - 2018-01-06
 ### Fixed
 - Proxy_url parameter in first-party captcha.js call
