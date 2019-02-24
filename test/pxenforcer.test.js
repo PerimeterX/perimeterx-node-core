@@ -190,6 +190,103 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-
+    it('should bypass monitor mode by header', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
+            data.score = 100;
+            data.action = 'b';
+            return callback ? callback(null, data) : '';
+        });
+        const curParams = Object.assign({
+            moduleMode: 0,
+            bypassMonitorHeader: 'x-px-block'
+        }, params);
+        req.headers = {
+            'x-px-block':'1'
+        };
+        const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
+            callback(null, {body:'hello buddy'});
+        });
+        req.method = 'POST';
+        req.body = {key: 'value', anotherKey: 'anotherValue'};
+        enforcer = new PxEnforcer(curParams, new PxClient());
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(false);
+            (response.body.indexOf('Please verify you are a human') > -1).should.equal(true);
+            reqStub.restore();
+            done();
+        });
+    });
+    it('should ignore bypass monitor mode by header', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
+            data.score = 100;
+            data.action = 'b';
+            return callback ? callback(null, data) : '';
+        });
+        const curParams = Object.assign({
+            moduleMode: 0,
+            bypassMonitorHeader: 'x-px-block'
+        }, params);
+        req.headers = {
+            'x-px-block':'0'
+        };
+        const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
+            callback(null, {body:'hello buddy'});
+        });
+        req.method = 'POST';
+        req.body = {key: 'value', anotherKey: 'anotherValue'};
+        enforcer = new PxEnforcer(curParams, new PxClient());
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(true);
+            reqStub.restore();
+            done();
+        });
+    });
+    it('should ignore bypass monitor header as its not present', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
+            data.score = 100;
+            data.action = 'b';
+            return callback ? callback(null, data) : '';
+        });
+        const curParams = Object.assign({
+            moduleMode: 0,
+            bypassMonitorHeader: 'x-px-block'
+        }, params);
+        const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
+            callback(null, { body:'hello buddy'});
+        });
+        req.method = 'POST';
+        req.body = {key: 'value', anotherKey: 'anotherValue'};
+        enforcer = new PxEnforcer(curParams, new PxClient());
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(true);
+            reqStub.restore();
+            done();
+        });
+    });
+    it('should ignore bypass monitor header as cookie is valid', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, callback) => {
+            data.score = 0;
+            data.action = 'b';
+            return callback ? callback(null, data) : '';
+        });
+        const curParams = Object.assign({
+            moduleMode: 0,
+            bypassMonitorHeader: 'x-px-block'
+        }, params);
+        req.headers = {
+            'x-px-block':'1'
+        };
+        const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
+            callback(null, { body:'hello buddy'});
+        });
+        req.method = 'POST';
+        req.body = {key: 'value', anotherKey: 'anotherValue'};
+        enforcer = new PxEnforcer(curParams, new PxClient());
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(true);
+            reqStub.restore();
+            done();
+        });
+    });
 });
 
