@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.8.0] - 2018-02-25
+### Added
+- Support for testing blocking flow in monitor mode
+
+### Fixed
+- VID validity check
+
 ## [1.7.0] - 2018-01-11
 ### Fixed
 - Full refactor of proxy support
