@@ -3,6 +3,7 @@
 const should = require('should');
 const rewire = require('rewire');
 const PxClient = rewire('../lib/pxclient');
+const fs = require('fs');
 
 describe('PX Configurations - pxconfig.js', () => {
     let pxconfig;
@@ -18,7 +19,8 @@ describe('PX Configurations - pxconfig.js', () => {
             debugMode: true,
             ipHeader: 'x-px-true-ip',
             maxBufferLength: 1,
-            customRequestHandler: null
+            customRequestHandler: null,
+            moduleMode: 1,
         };
 
         pxconfig = require('../lib/pxconfig');
@@ -102,5 +104,19 @@ describe('PX Configurations - pxconfig.js', () => {
         pxconfig.init(params, new PxClient());
         const conf = pxconfig.conf;
         conf.CSS_REF[0].should.equal('http://www.google.com/stylesheet.css');
+    });
+
+    it('Load Existing Config file', () => {
+        params.configFilePath = './config.json';
+        fs.writeFileSync(params.configFilePath, `{"moduleMode": 0}`);
+        pxconfig.init(params, new PxClient());
+        const conf = pxconfig.conf;
+        conf.MODULE_MODE.should.equal(0);
+    });
+
+    it('Load Non-Existing Config file', () => {
+        pxconfig.init(params, new PxClient());
+        const conf = pxconfig.conf;
+        conf.MODULE_MODE.should.equal(1);
     });
 });
