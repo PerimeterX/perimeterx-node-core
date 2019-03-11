@@ -28,9 +28,9 @@ Table of Contents
 ### <a name="basic-usage"></a> Basic Usage Example
 To integrate this module into an enforcer, users should initialize the enforcer.
 ```javascript
-function initPXModule(params) {
+function initPXModule(params, client, logger) {
     params.moduleVersion = '<your module version>';
-    enforcer = new PxEnforcer(params);
+    enforcer = new PxEnforcer(params, client, logger);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
         setInterval(enforcer.config.confManager.loadData.bind(enforcer.config.confManager), enforcer.config.conf.CONFIGURATION_LOAD_INTERVAL);
@@ -64,9 +64,9 @@ Extend the `PxClient` class to send activities to PerimeterX.
 ```javascript
 const PxClient = require('perimeterx-node-core').PxClient;
 class MyClient extends PxClient {
-    init() {
+    init(config) {
         setInterval(() => {
-            this.submitActivities();
+            this.submitActivities(config);
         }, 1000);
     }
 }
@@ -77,8 +77,9 @@ Make sure to pass the client instance when initializing the enforcer.
 ```javascript
 function initPXModule(params) {
     params.moduleVersion = '<your module version>';
-    let pxClient = new MyClient();
-    enforcer = new PxEnforcer(params, pxClient);
+    const pxLogger = new PxLogger();
+    const pxClient = new MyClient(pxLogger);
+    enforcer = new PxEnforcer(params, pxClient, pxLogger);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
         setInterval(enforcer.config.confManager.loadData.bind(enforcer.config.confManager), enforcer.config.conf.CONFIGURATION_LOAD_INTERVAL);
