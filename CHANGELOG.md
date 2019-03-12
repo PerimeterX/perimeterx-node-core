@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.0.0] - 2018-03-14
+## [2.0.0] - 2019-03-14
 ### Added
 - Support for multiple instances of PxEnforcer (for multi px-app in same web app)
 
@@ -13,11 +13,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Major parts of the code to inject an instance of PxLogger and PX config.
 
 ### Changed
-- Changed the api of the request object to contain a `setAgent` method to set the agent of the request. (Caveat: this module is still global).
-- Exposed PxLogger class so it can be used to initialize the PxEnforcer and PxClient classes.
-- Changed PxClient signature to receive a logger as an argument and init receives a config.
+- Changed PxClient.submitActivities() signature to receive a config object.
 
-## [1.8.0] - 2018-02-25
+## [1.8.0] - 2019-02-25
 ### Added
 - Support for testing blocking flow in monitor mode
 

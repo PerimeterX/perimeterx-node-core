@@ -7,11 +7,9 @@ const request = require('../lib/request');
 const pxhttpc = require('../lib/pxhttpc');
 const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
-const PxLogger = require('../lib/pxlogger');
-const PxConfig = require('../lib/pxconfig');
 
 describe('PX Enforcer - pxenforcer.js', () => {
-    let params, enforcer, req, stub, pxConfig, config, pxClient, pxLogger;
+    let params, enforcer, req, stub, pxClient;
 
     beforeEach(() => {
         params = {
@@ -39,10 +37,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return req.headers[key] || '';
         };
 
-        pxLogger = new PxLogger();
-        pxClient = new PxClient(pxLogger);
-        pxConfig = new PxConfig(params, pxClient, pxLogger);
-        config = pxConfig.conf;
+        pxClient = new PxClient();
     });
 
     afterEach(() => {
@@ -50,11 +45,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('enforces a call in a disabled module', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
         params.enableModule = false;
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
 
             (response === undefined).should.equal(true);
@@ -63,10 +58,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('enforces a call in an enabled module', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
 
             (response === undefined).should.equal(true);
@@ -75,14 +70,14 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party to get client', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        const reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
+        const reqStub = sinon.stub(request, 'get').callsFake((data, config, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy', proxy:''});
         });
         req.originalUrl = '/_APP_ID/init.js';
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal('hello buddy');
@@ -93,16 +88,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party for xhr post request', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+        const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'POST';
         req.body = 'test';
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal('hello buddy');
@@ -113,16 +108,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party for xhr get request', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        const reqStub = sinon.stub(request, 'get').callsFake((data, callback) => {
+        const reqStub = sinon.stub(request, 'get').callsFake((data, config, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'GET';
         req.body = 'test';
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal('hello buddy');
@@ -133,17 +128,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party with pxvid cookie', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+        const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'POST';
         req.cookies['_pxvid'] = 'abab-123';
         req.body = 'test';
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal('hello buddy');
@@ -154,16 +149,16 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('uses first party for xhr and passed trough bodyParser', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+        const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
-        enforcer = new PxEnforcer(params, pxClient, pxLogger);
+        enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.should.equal('hello buddy');
@@ -174,7 +169,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
     });
 
     it('should not use first party paths if originated from mobile', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
@@ -183,13 +178,13 @@ describe('PX Enforcer - pxenforcer.js', () => {
             moduleMode: 1,
             firstPartyEnabled: true
         }, params);
-        const reqStub = sinon.stub(request, 'post').callsFake((data, callback) => {
+        const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
         });
         req.headers = {'x-px-authorization': '3:some-fake-cookie'};
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
-        enforcer = new PxEnforcer(curParams, pxClient, pxLogger);
+        enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             response.body.action.should.equal('block');
@@ -198,7 +193,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
     it('should bypass monitor mode by header', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
@@ -215,7 +210,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
-        enforcer = new PxEnforcer(curParams, pxClient, pxLogger);
+        enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
             (response.body.indexOf('Please verify you are a human') > -1).should.equal(true);
@@ -224,7 +219,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
     it('should ignore bypass monitor mode by header', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
@@ -241,7 +236,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
-        enforcer = new PxEnforcer(curParams, pxClient, pxLogger);
+        enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(true);
             reqStub.restore();
@@ -249,7 +244,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
     it('should ignore bypass monitor header as its not present', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
@@ -263,7 +258,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
-        enforcer = new PxEnforcer(curParams, pxClient, pxLogger);
+        enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(true);
             reqStub.restore();
@@ -271,7 +266,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
     it('should ignore bypass monitor header as cookie is valid', (done) => {
-        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, pxLogger, callback) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 0;
             data.action = 'b';
             return callback ? callback(null, data) : '';
@@ -288,7 +283,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
-        enforcer = new PxEnforcer(curParams, pxClient, pxLogger);
+        enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(true);
             reqStub.restore();
@@ -296,4 +291,3 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 });
-

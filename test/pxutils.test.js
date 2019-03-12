@@ -3,7 +3,6 @@
 const should = require('should');
 const rewire = require('rewire');
 const pxutil = require('../lib/pxutil');
-const PxClient = rewire('../lib/pxclient');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
 
@@ -24,8 +23,8 @@ describe('PX Utils - pxutils.js', () => {
             enrichCustomParameters: enrichCustomParameters
         };
 
-        const pxLogger = new PxLogger();
-        pxConfig = new PxConfig(params, new PxClient(pxLogger), pxLogger);
+        const logger = new PxLogger();
+        pxConfig = new PxConfig(params, logger);
     });
 
     it('should generate headers array from headers object', (done) => {

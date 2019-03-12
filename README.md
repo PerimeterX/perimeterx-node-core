@@ -28,9 +28,9 @@ Table of Contents
 ### <a name="basic-usage"></a> Basic Usage Example
 To integrate this module into an enforcer, users should initialize the enforcer.
 ```javascript
-function initPXModule(params, client, logger) {
+function initPXModule(params, client) {
     params.moduleVersion = '<your module version>';
-    enforcer = new PxEnforcer(params, client, logger);
+    enforcer = new PxEnforcer(params, client);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
         setInterval(enforcer.config.confManager.loadData.bind(enforcer.config.confManager), enforcer.config.conf.CONFIGURATION_LOAD_INTERVAL);
@@ -77,9 +77,8 @@ Make sure to pass the client instance when initializing the enforcer.
 ```javascript
 function initPXModule(params) {
     params.moduleVersion = '<your module version>';
-    const pxLogger = new PxLogger();
-    const pxClient = new MyClient(pxLogger);
-    enforcer = new PxEnforcer(params, pxClient, pxLogger);
+    const pxClient = new MyClient();
+    enforcer = new PxEnforcer(params, pxClient);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
         setInterval(enforcer.config.confManager.loadData.bind(enforcer.config.confManager), enforcer.config.conf.CONFIGURATION_LOAD_INTERVAL);

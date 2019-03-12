@@ -2,14 +2,12 @@
 
 const should = require('should');
 const rewire = require('rewire');
-const PxClient = rewire('../lib/pxclient');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
 
 describe('PX Configurations - pxconfig.js', () => {
     let params;
-    const pxLogger = new PxLogger();
-    const pxClient = new PxClient(pxLogger);
+    const logger = new PxLogger();
 
     beforeEach(() => {
         params = {
@@ -28,7 +26,7 @@ describe('PX Configurations - pxconfig.js', () => {
 
     it('should set baseUrl to sapi-<appid>.perimeterx.net', (done) => {
         params.pxAppId = 'PXJWbMQarF';
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.SERVER_HOST.should.be.exactly(`sapi-${params.pxAppId.toLowerCase()}.perimeterx.net`);
         done();
@@ -36,7 +34,7 @@ describe('PX Configurations - pxconfig.js', () => {
 
     it('blocking score should be 80', (done) => {
         params.blockingScore = 80;
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.BLOCKING_SCORE.should.be.exactly(80);
         done();
@@ -47,7 +45,7 @@ describe('PX Configurations - pxconfig.js', () => {
             return '1.2.3.4';
         };
 
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.GET_USER_IP().should.be.exactly('1.2.3.4');
         done();
@@ -58,7 +56,7 @@ describe('PX Configurations - pxconfig.js', () => {
             return 'Blocked';
         };
 
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.CUSTOM_REQUEST_HANDLER().should.be.exactly('Blocked');
         done();
@@ -66,42 +64,42 @@ describe('PX Configurations - pxconfig.js', () => {
 
     it('should set enableModule to false', () => {
         params.enableModule = false;
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.ENABLE_MODULE.should.be.exactly(false);
     });
 
     it('should set sendPageActivities to false', () => {
         params.sendPageActivities = false;
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.SEND_PAGE_ACTIVITIES.should.be.exactly(false);
     });
 
     it('should set debugMode to true', () => {
         params.sendPageActivities = true;
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.DEBUG_MODE.should.be.exactly(true);
     });
 
     it('customLogo should be overridden', () => {
         params.customLogo = 'http://www.google.com/logo.jpg';
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.CUSTOM_LOGO.should.be.exactly('http://www.google.com/logo.jpg');
     });
 
     it('jsRef should be overridden', () => {
         params.jsRef = ['http://www.google.com/script.js'];
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.JS_REF[0].should.equal('http://www.google.com/script.js');
     });
 
     it('cssRef should be overridden', () => {
         params.cssRef = ['http://www.google.com/stylesheet.css'];
-        const pxConfig = new PxConfig(params, pxClient, pxLogger);
+        const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.CSS_REF[0].should.equal('http://www.google.com/stylesheet.css');
     });
