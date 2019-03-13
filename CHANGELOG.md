@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.8.0] - 2018-02-25
+## [2.0.0] - 2019-03-14
+### Added
+- Support for multiple instances of PxEnforcer (for multi px-app in same web app)
+
+### Refactored
+- Major parts of the code to inject an instance of PxLogger and PX config.
+
+### Changed
+- Changed PxClient.submitActivities() signature to receive a config object.
+
+## [1.8.0] - 2019-02-25
 ### Added
 - Support for testing blocking flow in monitor mode
 

@@ -5,7 +5,7 @@
 [PerimeterX](http://www.perimeterx.com) Shared base for NodeJS enforcers
 =============================================================
 
-> Latest stable version: [v1.8.0](https://www.npmjs.com/package/perimeterx-node-core)
+> Latest stable version: [v2.0.0](https://www.npmjs.com/package/perimeterx-node-core)
 
 This is a shared base implementation for PerimeterX Express enforcer and future NodeJS enforcers. For a fully functioning implementation example, see the [Node-Express enforcer](https://github.com/PerimeterX/perimeterx-node-express/) implementation.
 
@@ -28,9 +28,9 @@ Table of Contents
 ### <a name="basic-usage"></a> Basic Usage Example
 To integrate this module into an enforcer, users should initialize the enforcer.
 ```javascript
-function initPXModule(params) {
+function initPXModule(params, client) {
     params.moduleVersion = '<your module version>';
-    enforcer = new PxEnforcer(params);
+    enforcer = new PxEnforcer(params, client);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
         setInterval(enforcer.config.confManager.loadData.bind(enforcer.config.confManager), enforcer.config.conf.CONFIGURATION_LOAD_INTERVAL);
@@ -64,9 +64,9 @@ Extend the `PxClient` class to send activities to PerimeterX.
 ```javascript
 const PxClient = require('perimeterx-node-core').PxClient;
 class MyClient extends PxClient {
-    init() {
+    init(config) {
         setInterval(() => {
-            this.submitActivities();
+            this.submitActivities(config);
         }, 1000);
     }
 }
@@ -77,7 +77,7 @@ Make sure to pass the client instance when initializing the enforcer.
 ```javascript
 function initPXModule(params) {
     params.moduleVersion = '<your module version>';
-    let pxClient = new MyClient();
+    const pxClient = new MyClient();
     enforcer = new PxEnforcer(params, pxClient);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
