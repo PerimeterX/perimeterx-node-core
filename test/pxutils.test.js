@@ -3,10 +3,11 @@
 const should = require('should');
 const rewire = require('rewire');
 const pxutil = require('../lib/pxutil');
-const PxClient = rewire('../lib/pxclient');
+const PxConfig = require('../lib/pxconfig');
+const PxLogger = require('../lib/pxlogger');
 
 describe('PX Utils - pxutils.js', () => {
-    let pxconfig;
+    let pxConfig;
     let params;
 
     beforeEach(() => {
@@ -22,12 +23,12 @@ describe('PX Utils - pxutils.js', () => {
             enrichCustomParameters: enrichCustomParameters
         };
 
-        pxconfig = require('../lib/pxconfig');
-        pxconfig.init(params, new PxClient());
+        const logger = new PxLogger();
+        pxConfig = new PxConfig(params, logger);
     });
 
     it('should generate headers array from headers object', (done) => {
-        const formattedHeaders = pxutil.formatHeaders({K: 'v'});
+        const formattedHeaders = pxutil.formatHeaders({K: 'v'}, pxConfig.conf.SENSITIVE_HEADERS);
         (Object.prototype.toString.call(formattedHeaders)).should.be.exactly('[object Array]');
         formattedHeaders[0]['name'].should.be.exactly('K');
         formattedHeaders[0]['value'].should.be.exactly('v');
@@ -36,7 +37,7 @@ describe('PX Utils - pxutils.js', () => {
 
     it('should receive custom params function and custom params object and add only 2 of them', (done) => {
         const dict = {};
-        pxutil.prepareCustomParams(pxconfig.conf, dict);
+        pxutil.prepareCustomParams(pxConfig.conf, dict);
         dict['custom_param1'].should.be.exactly('1');
         dict['custom_param2'].should.be.exactly('2');
         dict['custom_param10'].should.be.exactly('10');
