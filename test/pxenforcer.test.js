@@ -290,4 +290,51 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+    it('should not return json resposne when advancedBlockingResponse is false', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+        const curParams = Object.assign({
+            moduleMode: 1,
+            advancedBlockingResponse: false
+        }, params);
+        const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
+            callback(null, { body:'hello buddy'});
+        });
+        req.method = 'POST';
+        req.body = {key: 'value', anotherKey: 'anotherValue'};
+        req.headers = {'content-type': 'application/json'};
+        enforcer = new PxEnforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            should.exist(response);
+            should.equal(response.header.value, 'text/html');
+            reqStub.restore();
+            done();
+        });
+    });
+    it('should not return json resposne when advancedBlockingResponse is true (default)', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+        const curParams = Object.assign({
+            moduleMode: 1
+        }, params);
+        const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
+            callback(null, { body:'hello buddy'});
+        });
+        req.method = 'POST';
+        req.body = {key: 'value', anotherKey: 'anotherValue'};
+        req.headers = {'content-type': 'application/json'};
+        enforcer = new PxEnforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            should.exist(response);
+            should.equal(response.header.value, 'application/json');
+            reqStub.restore();
+            done();
+        });
+    });
 });
