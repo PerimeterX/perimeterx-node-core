@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha",
     "cover": "istanbul cover _mocha",
-    "lint": "./node_modules/eslint/bin/eslint.js lib/"
+    "lint": "./node_modules/eslint/bin/eslint.js lib/",
+    "lint:fix": "./node_modules/eslint/bin/eslint.js lib/ --fix"
   },
   "keywords": [
     "perimeterx"
@@ -26,7 +27,7 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "eslint-config-perimeterx": "^0.1.1",
+    "eslint-config-perimeterx": "^0.2.0",
     "mocha": "^5.2.0",
     "rewire": "^2.5.2",
     "should": "^8.3.0",
