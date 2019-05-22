@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "eslint-config-perimeterx": "^0.2.0",
+    "eslint-config-perimeterx": "^0.3.0",
     "mocha": "^5.2.0",
     "rewire": "^2.5.2",
     "should": "^8.3.0",
