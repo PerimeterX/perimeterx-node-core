@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+### Fixed
+- pxhd cookie not been sent in block activity
+- Do not echo back pxhd cookie coming from client
+- set pxhd expiration
+
+## [2.2.1] - 2019-05-24
+### Added
+- fixed timeout error, lint fixes  
+- removed node 11 from tests because it turned EOL
+
 ## [2.2.0] - 2019-05-06
 ### Added
 - Send telemetry by command
