@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/PerimeterX/perimeterx-node-core.svg?branch=master)](https://travis-ci.org/PerimeterX/perimeterx-node-core)
 
-![image](https://media.marketwire.com/attachments/201604/34215_PerimeterX_logo.jpg)
+![image](https://s.perimeterx.net/logo.png)
 
 [PerimeterX](http://www.perimeterx.com) Shared base for NodeJS enforcers
 =============================================================
