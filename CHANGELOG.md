@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Do not echo back pxhd cookie coming from client
 - set pxhd expiration
 
+## [2.3.0] - 2019-07-28
+### Added
+- Support for custom templates
+- Request object is now passed to `enrichCustomParams` function
+
+### Fixed
+- PXHD cookie will not echo back from client
+
 ## [2.2.1] - 2019-05-24
 ### Added
 - fixed timeout error, lint fixes  
