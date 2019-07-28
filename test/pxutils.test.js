@@ -37,7 +37,7 @@ describe('PX Utils - pxutils.js', () => {
 
     it('should receive custom params function and custom params object and add only 2 of them', (done) => {
         const dict = {};
-        pxutil.prepareCustomParams(pxConfig.conf, dict);
+        pxutil.prepareCustomParams(pxConfig.conf, dict, {uri: '/index.html'});
         dict['custom_param1'].should.be.exactly('1');
         dict['custom_param2'].should.be.exactly('2');
         dict['custom_param10'].should.be.exactly('10');
@@ -47,11 +47,14 @@ describe('PX Utils - pxutils.js', () => {
 
 });
 
-function enrichCustomParameters(params) {
+function enrichCustomParameters(params, origReq) {
     params['custom_param1'] = '1';
     params['custom_param2'] = '2';
     params['custom_param10'] = '10';
     params['custom_param11'] = '11';
     params['custom'] = '6';
+    if ('/index.html' === origReq.uri) {
+        params['custom_param5'] = 'index';
+    }
     return params;
 }
