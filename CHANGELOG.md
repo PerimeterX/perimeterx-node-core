@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.1] - 2019-09-02
+### Fixed
+- Upgraded ESList version
+
 ## [2.3.0] - 2019-07-28
 ### Added
 - Support for custom templates
