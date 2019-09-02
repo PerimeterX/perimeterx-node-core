@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.3.1] - 2019-09-02
 ### Fixed
-- Upgraded ESList version
+- Upgraded ESLint version
 
 ## [2.3.0] - 2019-07-28
 ### Added
