@@ -26,7 +26,7 @@
     "raw-body": "^2.3.2"
   },
   "devDependencies": {
-    "eslint": "^6.1.0",
+    "eslint": "^6.3.0",
     "eslint-config-perimeterx": "^0.3.0",
     "mocha": "^5.2.0",
     "rewire": "^2.5.2",
