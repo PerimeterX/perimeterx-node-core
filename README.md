@@ -1,11 +1,11 @@
 [![Build Status](https://travis-ci.org/PerimeterX/perimeterx-node-core.svg?branch=master)](https://travis-ci.org/PerimeterX/perimeterx-node-core)
 
-![image](https://media.marketwire.com/attachments/201604/34215_PerimeterX_logo.jpg)
+![image](https://s.perimeterx.net/logo.png)
 
 [PerimeterX](http://www.perimeterx.com) Shared base for NodeJS enforcers
 =============================================================
 
-> Latest stable version: [v2.3.0](https://www.npmjs.com/package/perimeterx-node-core)
+> Latest stable version: [v2.3.1](https://www.npmjs.com/package/perimeterx-node-core)
 
 This is a shared base implementation for PerimeterX Express enforcer and future NodeJS enforcers. For a fully functioning implementation example, see the [Node-Express enforcer](https://github.com/PerimeterX/perimeterx-node-express/) implementation.
 
