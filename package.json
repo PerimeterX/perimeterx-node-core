@@ -7,7 +7,9 @@
     "test": "mocha",
     "cover": "istanbul cover _mocha",
     "lint": "./node_modules/eslint/bin/eslint.js lib/",
-    "lint:fix": "./node_modules/eslint/bin/eslint.js lib/ --fix"
+    "lint:fix": "./node_modules/eslint/bin/eslint.js lib/ --fix",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "perimeterx"
@@ -23,7 +25,8 @@
     "content-type": "^1.0.4",
     "https-proxy-agent": "^2.2.1",
     "mu2": "^0.5.21",
-    "raw-body": "^2.3.2"
+    "raw-body": "^2.3.2",
+    "snyk": "^1.230.5"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
@@ -32,5 +35,6 @@
     "rewire": "^2.5.2",
     "should": "^8.3.0",
     "sinon": "^2.1.0"
-  }
+  },
+  "snyk": true
 }
