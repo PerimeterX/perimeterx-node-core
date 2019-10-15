@@ -21,7 +21,7 @@
   "dependencies": {
     "agent-phin": "^1.0.4",
     "content-type": "^1.0.4",
-    "https-proxy-agent": "^2.2.1",
+    "https-proxy-agent": "^3.0.0",
     "mu2": "^0.5.21",
     "raw-body": "^2.3.2"
   },
