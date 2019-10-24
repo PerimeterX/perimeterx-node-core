@@ -435,4 +435,48 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+    it('should monitor specific routes with enforced specific routes not in monitor', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            moduleMode: 1,
+            enforcedRoutes: ['/profile', '/login'],
+            monitoredRoutes: ['/']
+        }, params);
+
+        req.originalUrl = '/';
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            should(error).not.be.ok();
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+    it('should enforce specific routes with enforced specific routes not in monitor', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            moduleMode: 1,
+            enforcedRoutes: ['/profile', '/login'],
+            monitoredRoutes: ['/']
+        }, params);
+
+        req.originalUrl = '/login';
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            should(error).not.be.ok();
+            (response === undefined).should.equal(false);
+            done();
+        });
+    });
 });
