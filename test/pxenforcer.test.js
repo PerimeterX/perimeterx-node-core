@@ -7,9 +7,10 @@ const request = require('../lib/request');
 const pxhttpc = require('../lib/pxhttpc');
 const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
+const proxyquire = require('proxyquire');
 
 describe('PX Enforcer - pxenforcer.js', () => {
-    let params, enforcer, req, stub, pxClient;
+    let params, enforcer, req, stub, pxClient, pxLoggerSpy, logger;
 
     beforeEach(() => {
         params = {
@@ -37,6 +38,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return req.headers[key] || '';
         };
 
+        pxLoggerSpy = {
+            debug: sinon.spy(),
+            error: sinon.spy(),
+            init:()=>{},
+            '@global': true
+        };
+
+        logger = function() {
+            return pxLoggerSpy;
+        };
+
         pxClient = new PxClient();
     });
 
@@ -49,9 +61,15 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
         params.enableModule = false;
-        enforcer = new PxEnforcer(params, pxClient);
+        const curParams = Object.assign({
+            enableModule: false
+        }, params);
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (response) => {
 
+            pxLoggerSpy.debug.calledWith('Request will not be verified, module is disabled').should.equal(true);
             (response === undefined).should.equal(true);
             done();
         });
@@ -334,6 +352,84 @@ describe('PX Enforcer - pxenforcer.js', () => {
             should.exist(response);
             should.equal(response.header.value, 'application/json');
             reqStub.restore();
+            done();
+        });
+    });
+
+    it('should not monitor specific route when enforcer is disabled', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        params.monitoredRoutes = ['/profile'];
+        params.enableModule = false;
+        req.originalUrl = '/profile';
+        enforcer = new PxEnforcer(params, pxClient);
+        enforcer.enforce(req, null, (response) => {
+
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+
+    it('should whitelist specific routes in blocking mode', async (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            moduleMode: 1,
+            whitelistRoutes: ['/profile']
+        }, params);
+
+        req.originalUrl = '/profile';
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            pxLoggerSpy.debug.calledWith('Whitelist route match: /profile').should.equal(true);
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+    it('should monitor specific routes in blocking mode', async (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            moduleMode: 1,
+            monitoredRoutes: ['/profile']
+        }, params);
+
+        req.originalUrl = '/profile';
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+    it('should enforce routes in blocking mode that are not specified in monitoredRoutes', async (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            data.score = 100;
+            data.action = 'c';
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            moduleMode: 1,
+            monitoredRoutes: ['/profile']
+        }, params);
+
+        req.originalUrl = '/admin';
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            (response === undefined).should.equal(false);
             done();
         });
     });
