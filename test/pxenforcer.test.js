@@ -41,11 +41,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
         pxLoggerSpy = {
             debug: sinon.spy(),
             error: sinon.spy(),
-            init:()=>{},
+            init: () => {},
             '@global': true
         };
 
-        logger = function() {
+        logger = function () {
             return pxLoggerSpy;
         };
 
@@ -92,7 +92,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
         const reqStub = sinon.stub(request, 'get').callsFake((data, config, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy', proxy:''});
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy', proxy: ''});
         });
         req.originalUrl = '/_APP_ID/init.js';
         enforcer = new PxEnforcer(params, pxClient);
@@ -110,7 +110,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'POST';
@@ -150,7 +150,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'POST';
@@ -171,7 +171,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy'});
         });
         req.originalUrl = '/_APP_ID/xhr/something';
         req.method = 'POST';
@@ -197,7 +197,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             firstPartyEnabled: true
         }, params);
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
-            callback(null, {headers: {'x-px-johnny': '1'}, body:'hello buddy'});
+            callback(null, {headers: {'x-px-johnny': '1'}, body: 'hello buddy'});
         });
         req.headers = {'x-px-authorization': '3:some-fake-cookie'};
         req.method = 'POST';
@@ -221,10 +221,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             bypassMonitorHeader: 'x-px-block'
         }, params);
         req.headers = {
-            'x-px-block':'1'
+            'x-px-block': '1'
         };
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
-            callback(null, {body:'hello buddy'});
+            callback(null, {body: 'hello buddy'});
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
@@ -247,10 +247,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             bypassMonitorHeader: 'x-px-block'
         }, params);
         req.headers = {
-            'x-px-block':'0'
+            'x-px-block': '0'
         };
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
-            callback(null, {body:'hello buddy'});
+            callback(null, {body: 'hello buddy'});
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
@@ -272,7 +272,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             bypassMonitorHeader: 'x-px-block'
         }, params);
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
-            callback(null, { body:'hello buddy'});
+            callback(null, {body: 'hello buddy'});
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
@@ -294,10 +294,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             bypassMonitorHeader: 'x-px-block'
         }, params);
         req.headers = {
-            'x-px-block':'1'
+            'x-px-block': '1'
         };
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
-            callback(null, { body:'hello buddy'});
+            callback(null, {body: 'hello buddy'});
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
@@ -319,7 +319,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             advancedBlockingResponse: false
         }, params);
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
-            callback(null, { body:'hello buddy'});
+            callback(null, {body: 'hello buddy'});
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
@@ -342,7 +342,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             moduleMode: 1
         }, params);
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
-            callback(null, { body:'hello buddy'});
+            callback(null, {body: 'hello buddy'});
         });
         req.method = 'POST';
         req.body = {key: 'value', anotherKey: 'anotherValue'};
@@ -366,13 +366,12 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.originalUrl = '/profile';
         enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
-
             (response === undefined).should.equal(true);
             done();
         });
     });
 
-    it('should whitelist specific routes in blocking mode', async (done) => {
+    it('should whitelist specific routes in blocking mode', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -388,12 +387,13 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
+            should(error).not.be.ok();
             pxLoggerSpy.debug.calledWith('Whitelist route match: /profile').should.equal(true);
             (response === undefined).should.equal(true);
             done();
         });
     });
-    it('should monitor specific routes in blocking mode', async (done) => {
+    it('should monitor specific routes in blocking mode', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -409,11 +409,12 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
+            should(error).not.be.ok();
             (response === undefined).should.equal(true);
             done();
         });
     });
-    it('should enforce routes in blocking mode that are not specified in monitoredRoutes', async (done) => {
+    it('should enforce routes in blocking mode that are not specified in monitoredRoutes', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -429,6 +430,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
+            should(error).not.be.ok();
             (response === undefined).should.equal(false);
             done();
         });
