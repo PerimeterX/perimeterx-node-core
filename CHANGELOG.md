@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.4.0] - 2019-10-15
 ### Added
 - Send HTTP method on async activities
+- Support for specific enforced routes and specific monitored routes
+
 ### Fixed
 - Upgraded dependency
 
