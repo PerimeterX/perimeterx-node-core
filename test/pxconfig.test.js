@@ -96,14 +96,14 @@ describe('PX Configurations - pxconfig.js', () => {
         params.jsRef = ['http://www.google.com/script.js'];
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.JS_REF[0].should.equal('http://www.google.com/script.js');
+        conf.JS_REF.should.equal('http://www.google.com/script.js');
     });
 
     it('cssRef should be overridden', () => {
         params.cssRef = ['http://www.google.com/stylesheet.css'];
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.CSS_REF[0].should.equal('http://www.google.com/stylesheet.css');
+        conf.CSS_REF.should.equal('http://www.google.com/stylesheet.css');
     });
 
     it('Load Existing Config file', () => {
