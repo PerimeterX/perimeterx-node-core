@@ -1,6 +1,6 @@
 {
   "name": "perimeterx-node-core",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "PerimeterX NodeJS shared core for various applications to monitor and block traffic according to PerimeterX risk score",
   "main": "index.js",
   "scripts": {
