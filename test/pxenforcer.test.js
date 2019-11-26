@@ -665,7 +665,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             filterByUserAgent: ['testme/v1.0']
         }, params);
 
-        req.headers = {'user-agent': 'testme/v1.0'};
+        req.headers = {'user-agent': 'TestME/v1.0'};
         const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (response) => {
