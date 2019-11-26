@@ -655,4 +655,44 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
+    it('Should skip verification because user agent is whitelisted', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            filterByUserAgent: ['testme/v1.0']
+        }, params);
+
+        req.headers = {'user-agent': 'TestME/v1.0'};
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (response) => {
+
+            pxLoggerSpy.debug.calledWith('Skipping verification for filtered user agent testme/v1.0').should.equal(true);
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+
+    it('Should skip verification because ip is whitelisted', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            filterByIP: ['1.2.0.0/16']
+        }, params);
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (response) => {
+
+            pxLoggerSpy.debug.calledWith('Skipping verification for filtered ip address 1.2.3.4').should.equal(true);
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+
 });
