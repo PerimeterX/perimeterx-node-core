@@ -28,7 +28,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req = {};
         req.headers = {};
         req.cookies = {};
-
+        req.method = "GET";
         req.originalUrl = '/';
         req.path = req.originalUrl.substring(req.originalUrl.lastIndexOf('/'));
         req.protocol = 'http';
@@ -690,6 +690,25 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer.enforce(req, null, (response) => {
 
             pxLoggerSpy.debug.calledWith('Skipping verification for filtered ip address 1.2.3.4').should.equal(true);
+            (response === undefined).should.equal(true);
+            done();
+        });
+    });
+
+    it('Should skip verification because method is whitelisted', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign({
+            filterByMethod: ['get']
+        }, params);
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', {'./pxlogger': logger});
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (response) => {
+
+            pxLoggerSpy.debug.calledWith('Skipping verification for filtered method GET').should.equal(true);
             (response === undefined).should.equal(true);
             done();
         });
