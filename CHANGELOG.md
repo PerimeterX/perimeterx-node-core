@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.6.1] - 2019-02-11
+## [2.6.1] - 2020-02-11
 ### Fixed
 - `originalRequest` support for ExpressJS.
 
