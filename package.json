@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/PerimeterX/perimeterx-node-core.git"
   },
-  "author": "Yaron Schwimmer",
+  "author": "Johnny Tordgeman",
   "license": "ISC",
   "dependencies": {
     "agent-phin": "^1.0.4",
