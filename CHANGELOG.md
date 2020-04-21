@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.7.1] - 2020-04-21
+### Added
+- New config to support `Secure` flag for pxhd cookie
+
 ## [2.7.0] - 2020-03-29
 ### Added
 - Support for external activities
