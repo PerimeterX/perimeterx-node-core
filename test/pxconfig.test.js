@@ -30,7 +30,7 @@ describe('PX Configurations - pxconfig.js', () => {
         params.pxAppId = 'PXJWbMQarF';
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.SERVER_HOST.should.be.exactly(`sapi-${params.pxAppId.toLowerCase()}.perimeterx.net`);
+        conf.BACKEND_URL.should.be.exactly(`https://sapi-${params.pxAppId.toLowerCase()}.perimeterx.net`);
         done();
     });
 
