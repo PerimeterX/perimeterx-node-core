@@ -28,6 +28,7 @@ describe("PX Logger - pxlogger.js", () => {
 
   it("sets PX_APP_ID and DEBUG_MODE", (done) => {
     logger.init(pxConfig);
+
     logger.debugMode.should.equal(true);
     logger.appId.should.equal("PX_APP_ID");
     done();
@@ -47,6 +48,7 @@ describe("PX Logger - pxlogger.js", () => {
   it("does not call console.lifo when DEBUG_MODE is false", (done) => {
     pxConfig.conf.DEBUG_MODE = false
     logger.init(pxConfig);
+
     logger.debugMode.should.equal(false);
 
     logger.error("there was an error");
@@ -65,6 +67,7 @@ describe("PX Logger - pxlogger.js", () => {
     };
     pxConfig.conf.CUSTOM_LOGGER = customLogger;
     logger.init(pxConfig);
+
     logger.logger.should.be.exactly(customLogger);
 
     logger.error("there was an error");
