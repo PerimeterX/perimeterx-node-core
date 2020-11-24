@@ -68,7 +68,7 @@ describe("PX Logger - pxlogger.js", () => {
     pxConfig.conf.CUSTOM_LOGGER = customLogger;
     logger.init(pxConfig);
 
-    logger.logger.should.be.exactly(customLogger);
+    logger.customLogger.should.be.exactly(customLogger);
 
     logger.error("there was an error");
     console.error.called.should.equal(false);

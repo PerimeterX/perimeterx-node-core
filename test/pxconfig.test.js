@@ -114,7 +114,7 @@ describe('PX Configurations - pxconfig.js', () => {
         const pxLogger = new PxLogger();
         const pxConfig = new PxConfig(params, pxLogger);
         const conf = pxConfig.conf;
-        conf.logger.logger.should.be.exactly(params.customLogger);
+        conf.logger.customLogger.should.be.exactly(params.customLogger);
     });
 
     it('Load Existing Config file', () => {
