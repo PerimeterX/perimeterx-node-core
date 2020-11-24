@@ -106,6 +106,17 @@ describe('PX Configurations - pxconfig.js', () => {
         conf.CSS_REF.should.equal('http://www.google.com/stylesheet.css');
     });
 
+    it('should use custom logger', () => {
+        params.customLogger = {
+            info() {},
+            error() {}
+        }
+        const pxLogger = new PxLogger();
+        const pxConfig = new PxConfig(params, pxLogger);
+        const conf = pxConfig.conf;
+        conf.logger.logger.should.be.exactly(params.customLogger);
+    });
+
     it('Load Existing Config file', () => {
         params.configFilePath = './test/files/config-1.json';
         const pxConfig = new PxConfig(params, logger);

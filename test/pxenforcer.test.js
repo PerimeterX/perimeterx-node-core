@@ -41,6 +41,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         pxLoggerSpy = {
             debug: sinon.spy(),
             error: sinon.spy(),
+            setCustomLogger: sinon.spy(),
             init: () => {},
             '@global': true
         };
