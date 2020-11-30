@@ -37,6 +37,8 @@ describe("PX Logger - pxlogger.js", () => {
   it("uses console to log when no custom logger is set", (done) => {
     logger.init(pxConfig);
 
+    logger.logger.should.be.exactly(console);
+
     logger.error("there was an error");
     console.error.calledOnce.should.equal(true);
 
@@ -45,7 +47,7 @@ describe("PX Logger - pxlogger.js", () => {
     done();
   });
 
-  it("does not call console.lifo when DEBUG_MODE is false", (done) => {
+  it("does not call console.info when DEBUG_MODE is false", (done) => {
     pxConfig.conf.DEBUG_MODE = false
     logger.init(pxConfig);
 
@@ -68,7 +70,7 @@ describe("PX Logger - pxlogger.js", () => {
     pxConfig.conf.CUSTOM_LOGGER = customLogger;
     logger.init(pxConfig);
 
-    logger.customLogger.should.be.exactly(customLogger);
+    logger.logger.should.be.exactly(customLogger);
 
     logger.error("there was an error");
     console.error.called.should.equal(false);
