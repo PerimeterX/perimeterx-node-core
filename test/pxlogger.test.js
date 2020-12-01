@@ -6,17 +6,11 @@ const sinon = require("sinon");
 const PxLogger = require("../lib/pxlogger");
 
 describe("PX Logger - pxlogger.js", () => {
-  let pxConfig, logger, consoleInfoStub, consoleErrorStub;
+  let params, logger, consoleInfoStub, consoleErrorStub;
 
   beforeEach(() => {
-    pxConfig = {
-      conf: {
-        DEBUG_MODE: true,
-        PX_APP_ID: "PX_APP_ID",
-        CUSTOM_LOGGER: null,
-      },
-    };
-    logger = new PxLogger();
+    params = {};
+    logger = new PxLogger(params);
     consoleInfoStub = sinon.stub(console, "info");
     consoleErrorStub = sinon.stub(console, "error");
   });
@@ -26,16 +20,18 @@ describe("PX Logger - pxlogger.js", () => {
     consoleErrorStub.restore();
   });
 
-  it("sets PX_APP_ID and DEBUG_MODE", (done) => {
-    logger.init(pxConfig);
+  it("sets default properties", (done) => {
+    logger = new PxLogger(params);
 
-    logger.debugMode.should.equal(true);
+    logger.debugMode.should.equal(false);
     logger.appId.should.equal("PX_APP_ID");
+    logger.internalLogger.should.be.exactly(console);
     done();
   });
 
   it("uses console to log when no custom logger is set", (done) => {
-    logger.init(pxConfig);
+    params.debugMode = true;
+    logger = new PxLogger(params);
 
     logger.internalLogger.should.be.exactly(console);
 
@@ -47,9 +43,9 @@ describe("PX Logger - pxlogger.js", () => {
     done();
   });
 
-  it("does not call console.info when DEBUG_MODE is false", (done) => {
-    pxConfig.conf.DEBUG_MODE = false
-    logger.init(pxConfig);
+  it("does not call console.info when debugMode is false", (done) => {
+    params.debugMode = false;
+    logger = new PxLogger(params);
 
     logger.debugMode.should.equal(false);
 
@@ -63,22 +59,22 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("uses custom logger when it is set", (done) => {
-    const customLogger = {
+    params.debugMode = true;
+    params.customLogger = {
       info: sinon.spy(),
       error: sinon.spy(),
     };
-    pxConfig.conf.CUSTOM_LOGGER = customLogger;
-    logger.init(pxConfig);
+    logger = new PxLogger(params);
 
-    logger.internalLogger.should.be.exactly(customLogger);
+    logger.internalLogger.should.be.exactly(params.customLogger);
 
     logger.error("there was an error");
     console.error.called.should.equal(false);
-    customLogger.error.calledOnce.should.equal(true);
+    params.customLogger.error.calledOnce.should.equal(true);
 
     logger.debug("debug message");
     console.info.called.should.equal(false);
-    customLogger.info.calledOnce.should.equal(true);
+    params.customLogger.info.calledOnce.should.equal(true);
     done();
   });
 });

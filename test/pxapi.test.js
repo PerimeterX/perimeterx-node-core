@@ -30,9 +30,8 @@ describe('PX API - pxapi.js', () => {
             moduleMode: 1,
         };
 
-        logger = new PxLogger();
+        logger = new PxLogger(params);
         pxConfig = new PxConfig(params, logger);
-        logger.init(pxConfig);
         config = pxConfig.conf;
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback(data);

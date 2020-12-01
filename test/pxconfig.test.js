@@ -7,8 +7,7 @@ const PxLogger = require('../lib/pxlogger');
 const fs = require('fs');
 
 describe('PX Configurations - pxconfig.js', () => {
-    let params;
-    const logger = new PxLogger();
+    let params, logger;
 
     beforeEach(() => {
         params = {
@@ -23,7 +22,7 @@ describe('PX Configurations - pxconfig.js', () => {
             customRequestHandler: null,
             moduleMode: 1,
         };
-
+        logger = new PxLogger(params);
     });
 
     it('should set baseUrl to sapi-<appid>.perimeterx.net', (done) => {
@@ -111,7 +110,7 @@ describe('PX Configurations - pxconfig.js', () => {
             info() {},
             error() {}
         }
-        const pxLogger = new PxLogger();
+        const pxLogger = new PxLogger(params);
         const pxConfig = new PxConfig(params, pxLogger);
         const conf = pxConfig.conf;
         conf.logger.internalLogger.should.be.exactly(params.customLogger);
