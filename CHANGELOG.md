@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - New config to support custom logger
 
+### Changed
+- `telemetry_handler.js` to use the logger in config rather than creating its own
+- `PxLogger` to directly consume user-defined `params` to remove circular dependecy between `PxConfig` and `PxLogger`
+
+### Fixed
+- String interpolation syntax errors in `telemetry_handler.js`
+- Bug where `debug` logs in `PxConfig` never gets called
+
 ## [2.7.2] - 2020-10-22
 ### Fixed
 - Support for `ACTIVITIES_TIMEOUT_MS`.
