@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - String interpolation syntax errors in `telemetry_handler.js`
 - Bug where `debug` logs in `PxConfig` never gets called
+- Issue where `debug` does not check `msg` type the same way `error` does
 
 ## [2.7.2] - 2020-10-22
 ### Fixed
