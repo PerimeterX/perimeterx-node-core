@@ -23,7 +23,7 @@ describe('PX Utils - pxutils.js', () => {
             enrichCustomParameters: enrichCustomParameters
         };
 
-        const logger = new PxLogger();
+        const logger = new PxLogger(params);
         pxConfig = new PxConfig(params, logger);
     });
 
