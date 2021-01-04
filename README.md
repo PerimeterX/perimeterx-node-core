@@ -118,3 +118,4 @@ $ npm test
 
 ### Pull Request
 After you have completed the process, create a pull request to the Upstream repository. Please provide a complete and thorough description explaining the changes. Remember this code has to be read by our maintainers, so keep it simple, smart and accurate.
+
