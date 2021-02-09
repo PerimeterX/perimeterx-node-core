@@ -1,6 +1,6 @@
 {
   "name": "perimeterx-node-core",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "description": "PerimeterX NodeJS shared core for various applications to monitor and block traffic according to PerimeterX risk score",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "dependencies": {
     "agent-phin": "^1.0.4",
     "content-type": "^1.0.4",
-    "https-proxy-agent": "^3.0.1",
+    "https-proxy-agent": "^5.0.0",
     "ip-range-check": "^0.2.0",
     "mu2": "^0.5.21",
     "raw-body": "^2.3.2"
