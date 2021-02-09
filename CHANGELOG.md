@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.9.0] - 2021-02-09
+### Added
+- Support for `customCookieHeader`
+
 ## [2.8.0] - 2020-11-24
 ### Added
 - New config to support custom logger
