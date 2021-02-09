@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.9.0] - 2021-02-09
+### Added
+- Support for `customCookieHeader`
+
+## [2.8.0] - 2020-11-24
+### Added
+- New config to support custom logger
+
+### Changed
+- `telemetry_handler.js` to use the logger in config rather than creating its own
+- `PxLogger` to directly consume user-defined `params` to remove circular dependecy between `PxConfig` and `PxLogger`
+
+### Fixed
+- String interpolation syntax errors in `telemetry_handler.js`
+- Bug where `debug` logs in `PxConfig` never gets called
+- Issue where `debug` does not check `msg` type the same way `error` does
+
 ## [2.7.2] - 2020-10-22
 ### Fixed
 - Support for `ACTIVITIES_TIMEOUT_MS`.
