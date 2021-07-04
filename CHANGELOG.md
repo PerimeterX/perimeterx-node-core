@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.13.1] - 2021-07-04
+
+### Added
+
+-   Bug fix: Cookie decryption fails on mobile sdk error
+
 ## [2.13.0] - 2021-06-08
 
 ### Added
