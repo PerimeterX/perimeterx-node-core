@@ -324,7 +324,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it('should not return json resposne when advancedBlockingResponse is false', (done) => {
+    it('should not return json response when advancedBlockingResponse is false', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -351,7 +351,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it('should not return json resposne when advancedBlockingResponse is true (default)', (done) => {
+    it('should return json response when advancedBlockingResponse is true (default)', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
