@@ -2,6 +2,7 @@
 
 const should = require("should");
 const sinon = require("sinon");
+const { LoggerSeverity } = require("../lib/enums/LoggerSeverity");
 
 const PxLogger = require("../lib/pxlogger");
 
@@ -10,7 +11,7 @@ describe("PX Logger - pxlogger.js", () => {
 
   beforeEach(() => {
     params = {};
-    logger = new PxLogger(params);
+    logger = new PxLogger('', '');
     consoleInfoStub = sinon.stub(console, "info");
     consoleErrorStub = sinon.stub(console, "error");
   });
@@ -21,17 +22,16 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("sets default properties", (done) => {
-    logger = new PxLogger(params);
+    logger = new PxLogger('PX_APP_ID', '');
 
-    logger.debugMode.should.equal(false);
     logger.appId.should.equal("PX_APP_ID");
+    logger.debugMode.should.equal(false);
     logger.internalLogger.should.be.exactly(console);
     done();
   });
 
   it("uses console to log when no custom logger is set", (done) => {
-    params.debugMode = true;
-    logger = new PxLogger(params);
+    logger = new PxLogger('PX_APP_ID', LoggerSeverity.DEBUG);
 
     logger.internalLogger.should.be.exactly(console);
 
@@ -44,8 +44,7 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("does not call console.info when debugMode is false", (done) => {
-    params.debugMode = false;
-    logger = new PxLogger(params);
+    logger = new PxLogger('PX_APP_ID', LoggerSeverity.FATAL);
 
     logger.debugMode.should.equal(false);
 
@@ -59,22 +58,21 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("uses custom logger when it is set", (done) => {
-    params.debugMode = true;
-    params.customLogger = {
+    const customLogger = {
       info: sinon.spy(),
       error: sinon.spy(),
     };
-    logger = new PxLogger(params);
+    logger = new PxLogger('PX_APP_ID', LoggerSeverity.DEBUG, customLogger);
 
-    logger.internalLogger.should.be.exactly(params.customLogger);
+    logger.internalLogger.should.be.exactly(customLogger);
 
     logger.error("there was an error");
     console.error.called.should.equal(false);
-    params.customLogger.error.calledOnce.should.equal(true);
+    customLogger.error.calledOnce.should.equal(true);
 
     logger.debug("debug message");
     console.info.called.should.equal(false);
-    params.customLogger.info.calledOnce.should.equal(true);
+    customLogger.info.calledOnce.should.equal(true);
     done();
   });
 });

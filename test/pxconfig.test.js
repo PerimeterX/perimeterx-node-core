@@ -1,132 +1,123 @@
 'use strict';
 
+const fs = require('fs');
 const should = require('should');
 const rewire = require('rewire');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
-const fs = require('fs');
+const { LoggerSeverity } = require('../lib/enums/LoggerSeverity');
+const { ModuleMode } = require('../lib/enums/ModuleMode');
 
 describe('PX Configurations - pxconfig.js', () => {
     let params, logger;
 
     beforeEach(() => {
         params = {
-            pxAppId: 'PX_APP_ID',
-            cookieSecretKey: 'PX_COOKIE_SECRET',
-            authToken: 'PX_AUTH_TOKEN',
-            sendPageActivities: true,
-            blockingScore: 60,
-            debugMode: true,
-            ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1,
-            customRequestHandler: null,
-            moduleMode: 1,
+            px_app_id: 'PX_APP_ID',
+            px_cookie_secret: 'PX_COOKIE_SECRET',
+            px_auth_token: 'PX_AUTH_TOKEN',
+            px_blocking_score: 60,
+            px_logger_severity: LoggerSeverity.FATAL,
+            px_ip_headers: ['x-px-true-ip'],
+            px_max_activity_batch_size: 1,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
         };
         logger = new PxLogger(params);
     });
 
-    it('should set baseUrl to sapi-<appid>.perimeterx.net', (done) => {
-        params.pxAppId = 'PXJWbMQarF';
+    it('should set baseUrl to sapi-<appid>.perimeterx.net', () => {
+        params.px_app_id = 'PXJWbMQarF';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.BACKEND_URL.should.be.exactly(`https://sapi-${params.pxAppId.toLowerCase()}.perimeterx.net`);
-        done();
+        const conf = pxConfig.Config;
+        conf.px_backend_url.should.be.exactly(`https://sapi-${params.px_app_id.toLowerCase()}.perimeterx.net`);
     });
 
-    it('blocking score should be 80', (done) => {
-        params.blockingScore = 80;
+    it('blocking score should be 80', () => {
+        params.px_blocking_score = 80;
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.BLOCKING_SCORE.should.be.exactly(80);
-        done();
+        const conf = pxConfig.Config;
+        conf.px_blocking_score.should.be.exactly(80);
     });
 
-    it('getUserIp function should be overridden', (done) => {
-        params.getUserIp = function () {
-            return '1.2.3.4';
-        };
-
+    it('px_extract_user_ip function should be overridden', () => {
+        params.px_extract_user_ip = () => '1.2.3.4';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.GET_USER_IP().should.be.exactly('1.2.3.4');
-        done();
+        const conf = pxConfig.Config;
+        conf.px_extract_user_ip().should.be.exactly('1.2.3.4');
     });
 
-    it('requestHandler function should be overridden', (done) => {
-        params.customRequestHandler = function () {
-            return 'Blocked';
-        };
+    it('px_custom_request_handler function should be overridden', () => {
+        params.px_custom_request_handler = () => 'Blocked';
 
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.CUSTOM_REQUEST_HANDLER().should.be.exactly('Blocked');
-        done();
+        const conf = pxConfig.Config;
+        conf.px_custom_request_handler().should.be.exactly('Blocked');
     });
 
-    it('should set enableModule to false', () => {
-        params.enableModule = false;
+    it('should set px_module_enabled to false', () => {
+        params.px_module_enabled = false;
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.ENABLE_MODULE.should.be.exactly(false);
+        const conf = pxConfig.Config;
+        conf.px_module_enabled.should.be.exactly(false);
     });
 
-    it('should set sendPageActivities to false', () => {
-        params.sendPageActivities = false;
+    it('should set px_send_page_activities to false', () => {
+        params.px_send_page_activities = false;
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.SEND_PAGE_ACTIVITIES.should.be.exactly(false);
+        const conf = pxConfig.Config;
+        conf.px_send_page_activities.should.be.exactly(false);
     });
 
-    it('should set debugMode to true', () => {
-        params.sendPageActivities = true;
+    it('should set px_logger_severity to debug', () => {
+        params.px_logger_severity = LoggerSeverity.DEBUG;
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.DEBUG_MODE.should.be.exactly(true);
+        const conf = pxConfig.Config;
+        conf.px_logger_severity.should.be.exactly(LoggerSeverity.DEBUG);
     });
 
-    it('customLogo should be overridden', () => {
-        params.customLogo = 'http://www.google.com/logo.jpg';
+    it('px_custom_logo should be overridden', () => {
+        params.px_custom_logo = 'http://www.google.com/logo.jpg';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.CUSTOM_LOGO.should.be.exactly('http://www.google.com/logo.jpg');
+        const conf = pxConfig.Config;
+        conf.px_custom_logo.should.be.exactly('http://www.google.com/logo.jpg');
     });
 
-    it('jsRef should be overridden', () => {
-        params.jsRef = ['http://www.google.com/script.js'];
+    it('px_js_ref should be overridden', () => {
+        params.px_js_ref = 'http://www.google.com/script.js';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.JS_REF.should.equal('http://www.google.com/script.js');
+        const conf = pxConfig.Config;
+        conf.px_js_ref.should.equal('http://www.google.com/script.js');
     });
 
-    it('cssRef should be overridden', () => {
-        params.cssRef = ['http://www.google.com/stylesheet.css'];
+    it('px_css_ref should be overridden', () => {
+        params.px_css_ref = 'http://www.google.com/stylesheet.css';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
-        conf.CSS_REF.should.equal('http://www.google.com/stylesheet.css');
+        const conf = pxConfig.Config;
+        conf.px_css_ref.should.equal('http://www.google.com/stylesheet.css');
     });
 
     it('should use custom logger', () => {
-        params.customLogger = {
+        const customLogger = {
             info() {},
             error() {}
         }
-        const pxLogger = new PxLogger(params);
+        const pxLogger = new PxLogger(params.px_app_id, params.px_logger_severity, customLogger);
         const pxConfig = new PxConfig(params, pxLogger);
-        const conf = pxConfig.conf;
-        conf.logger.internalLogger.should.be.exactly(params.customLogger);
+        const logger = pxConfig.Logger;
+        logger.internalLogger.should.be.exactly(customLogger);
     });
 
     it('Load Existing Config file', () => {
         params.configFilePath = './test/files/config-1.json';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
+        const conf = pxConfig.Config;
         conf.MODULE_MODE.should.equal(0);
     });
 
     it('Load Non-Existing Config file', () => {
         params.configFilePath = './test/files/config-notexist.json';
         const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.conf;
+        const conf = pxConfig.Config;
         conf.MODULE_MODE.should.equal(1);
     });
 });
