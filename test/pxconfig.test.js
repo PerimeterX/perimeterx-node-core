@@ -17,7 +17,7 @@ describe('PX Configurations - pxconfig.js', () => {
             px_cookie_secret: 'PX_COOKIE_SECRET',
             px_auth_token: 'PX_AUTH_TOKEN',
             px_blocking_score: 60,
-            px_logger_severity: LoggerSeverity.FATAL,
+            px_logger_severity: LoggerSeverity.DEBUG,
             px_ip_headers: ['x-px-true-ip'],
             px_max_activity_batch_size: 1,
             px_module_mode: ModuleMode.ACTIVE_BLOCKING,
@@ -61,11 +61,11 @@ describe('PX Configurations - pxconfig.js', () => {
         conf.px_module_enabled.should.be.exactly(false);
     });
 
-    it('should set px_send_page_activities to false', () => {
-        params.px_send_page_activities = false;
+    it('should set px_send_async_activities to false', () => {
+        params.px_send_async_activities = false;
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.Config;
-        conf.px_send_page_activities.should.be.exactly(false);
+        conf.px_send_async_activities.should.be.exactly(false);
     });
 
     it('should set px_logger_severity to debug', () => {
@@ -74,6 +74,13 @@ describe('PX Configurations - pxconfig.js', () => {
         const conf = pxConfig.Config;
         conf.px_logger_severity.should.be.exactly(LoggerSeverity.DEBUG);
     });
+
+    it('should have default px_logger_severity', () => {
+        params.px_logger_severity = 'nonexistent';
+        const pxConfig = new PxConfig(params, logger);
+        const conf = pxConfig.Config;
+        conf.px_logger_severity.should.be.exactly(LoggerSeverity.FATAL);
+    })
 
     it('px_custom_logo should be overridden', () => {
         params.px_custom_logo = 'http://www.google.com/logo.jpg';
@@ -107,17 +114,14 @@ describe('PX Configurations - pxconfig.js', () => {
         logger.internalLogger.should.be.exactly(customLogger);
     });
 
-    it('Load Existing Config file', () => {
-        params.configFilePath = './test/files/config-1.json';
-        const pxConfig = new PxConfig(params, logger);
+    it('Load existing config file', () => {
+        const pxConfig = new PxConfig('./test/files/config-1.json', logger);
         const conf = pxConfig.Config;
-        conf.MODULE_MODE.should.equal(0);
+        conf.px_blocking_score.should.equal(50);
     });
 
-    it('Load Non-Existing Config file', () => {
-        params.configFilePath = './test/files/config-notexist.json';
-        const pxConfig = new PxConfig(params, logger);
-        const conf = pxConfig.Config;
-        conf.MODULE_MODE.should.equal(1);
+    it('Nonexistent config file should throw error', () => {
+        const configFilePath = './test/files/config-notexist.json';
+        (() => new PxConfig(configFilePath, logger)).should.throw();
     });
 });

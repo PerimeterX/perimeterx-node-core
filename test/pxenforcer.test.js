@@ -3,26 +3,28 @@
 const should = require('should');
 const sinon = require('sinon');
 const rewire = require('rewire');
+const proxyquire = require('proxyquire');
+
 const request = require('../lib/request');
 const pxhttpc = require('../lib/pxhttpc');
 const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
-const proxyquire = require('proxyquire');
+const { LoggerSeverity } = require('../lib/enums/LoggerSeverity');
+const { ModuleMode } = require('../lib/enums/ModuleMode');
 
 describe('PX Enforcer - pxenforcer.js', () => {
     let params, enforcer, req, stub, pxClient, pxLoggerSpy, logger;
 
     beforeEach(() => {
         params = {
-            pxAppId: 'PX_APP_ID',
-            cookieSecretKey: 'kabum',
-            authToken: 'PX_AUTH_TOKEN',
-            sendPageActivities: true,
-            blockingScore: 60,
-            debugMode: true,
-            ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1,
-            enableModule: true,
+            px_app_id: 'PX_APP_ID',
+            px_cookie_secret: 'PX_COOKIE_SECRET',
+            px_auth_token: 'PX_AUTH_TOKEN',
+            px_blocking_score: 60,
+            px_logger_severity: LoggerSeverity.DEBUG,
+            px_ip_headers: ['x-px-true-ip'],
+            px_max_activity_batch_size: 1,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
         };
 
         req = {};
@@ -60,16 +62,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        params.enableModule = false;
-        const curParams = Object.assign(
-            {
-                enableModule: false,
-            },
-            params
-        );
-
+        params.px_module_enabled = false;
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
-        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer = new pxenforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
             pxLoggerSpy.debug.calledWith('Request will not be verified, module is disabled').should.equal(true);
             (response === undefined).should.equal(true);
@@ -193,13 +188,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             data.action = 'b';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                firstPartyEnabled: true,
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_first_party_enabled: true,
+        };
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, { headers: { 'x-px-johnny': '1' }, body: 'hello buddy' });
         });
@@ -214,19 +206,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
     it('should bypass monitor mode by header', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.MONITOR,
+            px_bypass_monitor_header: 'x-px-block',
+        };
         req.headers = {
             'x-px-block': '1',
         };
@@ -243,19 +233,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
     it('should ignore bypass monitor mode by header', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.MONITOR,
+            px_bypass_monitor_header: 'x-px-block',
+        };
         req.headers = {
             'x-px-block': '0',
         };
@@ -271,19 +259,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
     it('should ignore bypass monitor header as its not present', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'b';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.MONITOR,
+            px_bypass_monitor_header: 'x-px-block',
+        };
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
             callback(null, { body: 'hello buddy' });
         });
@@ -296,19 +282,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
     it('should ignore bypass monitor header as cookie is valid', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 0;
             data.action = 'b';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.MONITOR,
+            px_bypass_monitor_header: 'x-px-block',
+        };
         req.headers = {
             'x-px-block': '1',
         };
@@ -330,13 +314,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             data.action = 'c';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                advancedBlockingResponse: false,
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_advanced_blocking_response_enabled: false,
+        };
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
             callback(null, { body: 'hello buddy' });
         });
@@ -357,12 +338,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             data.action = 'c';
             return callback ? callback(null, data) : '';
         });
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING
+        };
         const reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
             callback(null, { body: 'hello buddy' });
         });
@@ -383,8 +361,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        params.monitoredRoutes = ['/profile'];
-        params.enableModule = false;
+        params.px_monitored_routes = ['/profile'];
+        params.px_module_enabled = false;
+
         req.originalUrl = '/profile';
         enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
@@ -398,8 +377,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        params.monitoredRoutes = [new RegExp(/\/profile/)];
-        params.enableModule = false;
+        params.px_monitored_routes = [new RegExp(/\/profile/)];
+        params.px_module_enabled = false;
+
         req.originalUrl = '/profile';
         enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
@@ -415,13 +395,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                whitelistRoutes: ['/profile'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_filter_by_route: ['/profile'],
+        };
 
         req.originalUrl = '/profile';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -441,13 +418,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                whitelistRoutes: [/\/profile/],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_filter_by_route: [/\/profile/],
+        };
 
         req.originalUrl = '/profile';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -467,13 +441,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                monitoredRoutes: ['/profile'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_monitored_routes: ['/profile'],
+        };
 
         req.originalUrl = '/profile';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -492,13 +463,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                monitoredRoutes: [/\/profile/],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_monitored_routes: [/\/profile/],
+        };
 
         req.originalUrl = '/profile';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -510,20 +478,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 
-    it('should enforce routes in blocking mode that are not specified in monitoredRoutes', (done) => {
+    it('should enforce routes in blocking mode that are not specified in px_monitored_routes', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                monitoredRoutes: ['/profile'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_monitored_routes: ['/profile'],
+        };
 
         req.originalUrl = '/admin';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -535,20 +500,17 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 
-    it('should enforce routes in blocking mode that are not specified in monitoredRoutes regex', (done) => {
+    it('should enforce routes in blocking mode that are not specified in px_monitored_routes regex', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                monitoredRoutes: [/\/profile/],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_monitored_routes: [/\/profile/],
+        };
 
         req.originalUrl = '/admin';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -567,14 +529,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                enforcedRoutes: ['/profile', '/login'],
-                monitoredRoutes: ['/'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+            px_enforced_routes: ['/profile', '/login'],
+            px_monitored_routes: ['/'],
+        };
 
         req.originalUrl = '/';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -593,14 +552,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                enforcedRoutes: [/\/profile/, /\/login/],
-                monitoredRoutes: [new RegExp(/^\/$/)],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: 1,
+            px_enforced_routes: [/\/profile/, /\/login/],
+            px_monitored_routes: [new RegExp(/^\/$/)],
+        };
 
         req.originalUrl = '/';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -619,14 +575,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                enforcedRoutes: ['/profile', '/login'],
-                monitoredRoutes: ['/'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: 1,
+            px_enforced_routes: ['/profile', '/login'],
+            px_monitored_routes: ['/'],
+        };
 
         req.originalUrl = '/login';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -645,14 +598,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                enforcedRoutes: [/\/profile/, /\/login/],
-                monitoredRoutes: [new RegExp(/^\/$/)],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: 1,
+            px_enforced_routes: [/\/profile/, /\/login/],
+            px_monitored_routes: [new RegExp(/^\/$/)],
+        };
 
         req.originalUrl = '/login';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -671,13 +621,11 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                enforcedRoutes: ['/profile', '/login'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: 1,
+            px_enforced_routes: ['/profile', '/login'],
+        };
+
 
         req.originalUrl = '/';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -696,13 +644,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                moduleMode: 1,
-                enforcedRoutes: [[/\/profile/, /\/login/]],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_module_mode: 1,
+            px_enforced_routes: [[/\/profile/, /\/login/]],
+        };
 
         req.originalUrl = '/';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -719,12 +664,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                filterByUserAgent: ['testme/v1.0'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_filter_by_user_agent: ['testme/v1.0'],
+        };
 
         req.headers = { 'user-agent': 'TestME/v1.0' };
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -743,12 +685,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                filterByUserAgent: [/test/i],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_filter_by_user_agent: [/test/i],
+        };
 
         req.headers = { 'user-agent': 'TestME/v1.0' };
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
@@ -767,12 +706,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                filterByIP: ['1.2.0.0/16'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_filter_by_ip: ['1.2.0.0/16'],
+        };
 
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
         enforcer = new pxenforcer(curParams, pxClient);
@@ -788,12 +724,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            {
-                filterByMethod: ['get'],
-            },
-            params
-        );
+        const curParams = { ...params,
+            px_filter_by_http_method: ['get'],
+        };
 
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
         enforcer = new pxenforcer(curParams, pxClient);

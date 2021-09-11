@@ -1,3 +1,6 @@
 {
-    "px_module_mode": 0
+    "px_app_id": "PX_APP_ID",
+    "px_auth_token": "PX_AUTH_TOKEN",
+    "px_cookie_secret": "PX_COOKIE_SECRET",
+    "px_blocking_score": 50
 }
