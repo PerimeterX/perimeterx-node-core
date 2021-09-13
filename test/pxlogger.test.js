@@ -2,6 +2,7 @@
 
 const should = require("should");
 const sinon = require("sinon");
+const { LoggerSeverity } = require("../lib/enums/LoggerSeverity");
 
 const PxLogger = require("../lib/pxlogger");
 
@@ -30,7 +31,7 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("uses console to log when no custom logger is set", (done) => {
-    params.px_logger_severity = true;
+    params.px_logger_severity = LoggerSeverity.DEBUG;
     logger = new PxLogger(params);
 
     logger.internalLogger.should.be.exactly(console);
@@ -59,7 +60,7 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("uses custom logger when it is set", (done) => {
-    params.px_logger_severity = true;
+    params.px_logger_severity = LoggerSeverity.DEBUG;
     params.customLogger = {
       info: sinon.spy(),
       error: sinon.spy(),

@@ -6,6 +6,7 @@ const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
 const fs = require('fs');
 const { ModuleMode } = require('../lib/enums/ModuleMode');
+const { LoggerSeverity } = require('../lib/enums/LoggerSeverity');
 
 describe('PX Configurations - pxconfig.js', () => {
     let params, logger;
@@ -78,11 +79,11 @@ describe('PX Configurations - pxconfig.js', () => {
         conf.SEND_PAGE_ACTIVITIES.should.be.exactly(false);
     });
 
-    it('should set px_logger_severity to true', () => {
-        params.px_logger_severity = true;
+    it('should set px_logger_severity to debug', () => {
+        params.px_logger_severity = LoggerSeverity.DEBUG;
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.DEBUG_MODE.should.be.exactly(true);
+        conf.DEBUG_MODE.should.be.exactly(LoggerSeverity.DEBUG);
     });
 
     it('px_custom_logo should be overridden', () => {
