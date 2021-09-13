@@ -30,7 +30,7 @@ Table of Contents
 To integrate this module into an enforcer, users should initialize the enforcer.
 ```javascript
 function initPXModule(params, client) {
-    params.moduleVersion = '<your module version>';
+    params.px_module_version = '<your module version>';
     enforcer = new PxEnforcer(params, client);
     //if dynamic configurations is configured
     if (enforcer.config.conf.DYNAMIC_CONFIGURATIONS) {
@@ -77,7 +77,7 @@ module.exports = PxExpressClient;
 Make sure to pass the client instance when initializing the enforcer.
 ```javascript
 function initPXModule(params) {
-    params.moduleVersion = '<your module version>';
+    params.px_module_version = '<your module version>';
     const pxClient = new MyClient();
     enforcer = new PxEnforcer(params, pxClient);
     //if dynamic configurations is configured
