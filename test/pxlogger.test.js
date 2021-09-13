@@ -30,7 +30,7 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("uses console to log when no custom logger is set", (done) => {
-    params.debugMode = true;
+    params.px_logger_severity = true;
     logger = new PxLogger(params);
 
     logger.internalLogger.should.be.exactly(console);
@@ -44,7 +44,7 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("does not call console.info when debugMode is false", (done) => {
-    params.debugMode = false;
+    params.px_logger_severity = false;
     logger = new PxLogger(params);
 
     logger.debugMode.should.equal(false);
@@ -59,7 +59,7 @@ describe("PX Logger - pxlogger.js", () => {
   });
 
   it("uses custom logger when it is set", (done) => {
-    params.debugMode = true;
+    params.px_logger_severity = true;
     params.customLogger = {
       info: sinon.spy(),
       error: sinon.spy(),

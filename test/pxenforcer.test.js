@@ -14,15 +14,15 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
     beforeEach(() => {
         params = {
-            pxAppId: 'PX_APP_ID',
-            cookieSecretKey: 'kabum',
-            authToken: 'PX_AUTH_TOKEN',
-            sendPageActivities: true,
-            blockingScore: 60,
-            debugMode: true,
-            ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1,
-            enableModule: true,
+            px_app_id: 'PX_APP_ID',
+            px_cookie_secret: 'kabum',
+            px_auth_token: 'PX_AUTH_TOKEN',
+            px_send_async_activities_enabled: true,
+            px_blocking_score: 60,
+            px_logger_severity: true,
+            px_ip_headers: ['x-px-true-ip'],
+            px_max_activity_batch_size: 1,
+            px_module_enabled: true,
         };
 
         req = {};
@@ -60,10 +60,10 @@ describe('PX Enforcer - pxenforcer.js', () => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
-        params.enableModule = false;
+        params.px_module_enabled = false;
         const curParams = Object.assign(
             {
-                enableModule: false,
+                px_module_enabled: false,
             },
             params
         );
@@ -195,8 +195,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                firstPartyEnabled: true,
+                px_module_mode: 1,
+                px_first_party_enabled: true,
             },
             params
         );
@@ -222,8 +222,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
+                px_module_mode: 0,
+                px_bypass_monitor_header: 'x-px-block',
             },
             params
         );
@@ -251,8 +251,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
+                px_module_mode: 0,
+                px_bypass_monitor_header: 'x-px-block',
             },
             params
         );
@@ -279,8 +279,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
+                px_module_mode: 0,
+                px_bypass_monitor_header: 'x-px-block',
             },
             params
         );
@@ -304,8 +304,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 0,
-                bypassMonitorHeader: 'x-px-block',
+                px_module_mode: 0,
+                px_bypass_monitor_header: 'x-px-block',
             },
             params
         );
@@ -324,7 +324,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it('should not return json response when advancedBlockingResponse is false', (done) => {
+    it('should not return json response when px_advanced_blocking_response_enabled is false', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -332,8 +332,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                advancedBlockingResponse: false,
+                px_module_mode: 1,
+                px_advanced_blocking_response_enabled: false,
             },
             params
         );
@@ -351,7 +351,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
-    it('should return json response when advancedBlockingResponse is true (default)', (done) => {
+    it('should return json response when px_advanced_blocking_response_enabled is true (default)', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -359,7 +359,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                moduleMode: 1,
+                px_module_mode: 1,
             },
             params
         );
@@ -383,8 +383,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        params.monitoredRoutes = ['/profile'];
-        params.enableModule = false;
+        params.px_monitored_routes = ['/profile'];
+        params.px_module_enabled = false;
         req.originalUrl = '/profile';
         enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
@@ -398,8 +398,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        params.monitoredRoutes = [new RegExp(/\/profile/)];
-        params.enableModule = false;
+        params.px_monitored_routes = [new RegExp(/\/profile/)];
+        params.px_module_enabled = false;
         req.originalUrl = '/profile';
         enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (response) => {
@@ -417,8 +417,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                whitelistRoutes: ['/profile'],
+                px_module_mode: 1,
+                px_filter_by_route: ['/profile'],
             },
             params
         );
@@ -443,8 +443,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                whitelistRoutes: [/\/profile/],
+                px_module_mode: 1,
+                px_filter_by_route: [/\/profile/],
             },
             params
         );
@@ -469,8 +469,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                monitoredRoutes: ['/profile'],
+                px_module_mode: 1,
+                px_monitored_routes: ['/profile'],
             },
             params
         );
@@ -494,8 +494,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                monitoredRoutes: [/\/profile/],
+                px_module_mode: 1,
+                px_monitored_routes: [/\/profile/],
             },
             params
         );
@@ -510,7 +510,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 
-    it('should enforce routes in blocking mode that are not specified in monitoredRoutes', (done) => {
+    it('should enforce routes in blocking mode that are not specified in px_monitored_routes', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -519,8 +519,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                monitoredRoutes: ['/profile'],
+                px_module_mode: 1,
+                px_monitored_routes: ['/profile'],
             },
             params
         );
@@ -535,7 +535,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 
-    it('should enforce routes in blocking mode that are not specified in monitoredRoutes regex', (done) => {
+    it('should enforce routes in blocking mode that are not specified in px_monitored_routes regex', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -544,8 +544,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                monitoredRoutes: [/\/profile/],
+                px_module_mode: 1,
+                px_monitored_routes: [/\/profile/],
             },
             params
         );
@@ -569,9 +569,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                enforcedRoutes: ['/profile', '/login'],
-                monitoredRoutes: ['/'],
+                px_module_mode: 1,
+                px_enforced_routes: ['/profile', '/login'],
+                px_monitored_routes: ['/'],
             },
             params
         );
@@ -595,9 +595,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                enforcedRoutes: [/\/profile/, /\/login/],
-                monitoredRoutes: [new RegExp(/^\/$/)],
+                px_module_mode: 1,
+                px_enforced_routes: [/\/profile/, /\/login/],
+                px_monitored_routes: [new RegExp(/^\/$/)],
             },
             params
         );
@@ -621,9 +621,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                enforcedRoutes: ['/profile', '/login'],
-                monitoredRoutes: ['/'],
+                px_module_mode: 1,
+                px_enforced_routes: ['/profile', '/login'],
+                px_monitored_routes: ['/'],
             },
             params
         );
@@ -647,9 +647,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                enforcedRoutes: [/\/profile/, /\/login/],
-                monitoredRoutes: [new RegExp(/^\/$/)],
+                px_module_mode: 1,
+                px_enforced_routes: [/\/profile/, /\/login/],
+                px_monitored_routes: [new RegExp(/^\/$/)],
             },
             params
         );
@@ -673,8 +673,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                enforcedRoutes: ['/profile', '/login'],
+                px_module_mode: 1,
+                px_enforced_routes: ['/profile', '/login'],
             },
             params
         );
@@ -698,8 +698,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                moduleMode: 1,
-                enforcedRoutes: [[/\/profile/, /\/login/]],
+                px_module_mode: 1,
+                px_enforced_routes: [[/\/profile/, /\/login/]],
             },
             params
         );
@@ -721,7 +721,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                filterByUserAgent: ['testme/v1.0'],
+                px_filter_by_user_agent: ['testme/v1.0'],
             },
             params
         );
@@ -745,7 +745,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                filterByUserAgent: [/test/i],
+                px_filter_by_user_agent: [/test/i],
             },
             params
         );
@@ -769,7 +769,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                filterByIP: ['1.2.0.0/16'],
+                px_filter_by_ip: ['1.2.0.0/16'],
             },
             params
         );
@@ -790,7 +790,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                filterByMethod: ['get'],
+                px_filter_by_http_method: ['get'],
             },
             params
         );
