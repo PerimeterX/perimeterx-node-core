@@ -8,6 +8,7 @@ const pxhttpc = require('../lib/pxhttpc');
 const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
 const proxyquire = require('proxyquire');
+const { ModuleMode } = require('../lib/enums/ModuleMode');
 
 describe('PX Enforcer - pxenforcer.js', () => {
     let params, enforcer, req, stub, pxClient, pxLoggerSpy, logger;
@@ -195,7 +196,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_first_party_enabled: true,
             },
             params
@@ -222,7 +223,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 0,
+                px_module_mode: ModuleMode.MONITOR,
                 px_bypass_monitor_header: 'x-px-block',
             },
             params
@@ -251,7 +252,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 0,
+                px_module_mode: ModuleMode.MONITOR,
                 px_bypass_monitor_header: 'x-px-block',
             },
             params
@@ -279,7 +280,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 0,
+                px_module_mode: ModuleMode.MONITOR,
                 px_bypass_monitor_header: 'x-px-block',
             },
             params
@@ -304,7 +305,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 0,
+                px_module_mode: ModuleMode.MONITOR,
                 px_bypass_monitor_header: 'x-px-block',
             },
             params
@@ -332,7 +333,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_advanced_blocking_response_enabled: false,
             },
             params
@@ -359,7 +360,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
             },
             params
         );
@@ -417,7 +418,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_filter_by_route: ['/profile'],
             },
             params
@@ -443,7 +444,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_filter_by_route: [/\/profile/],
             },
             params
@@ -469,7 +470,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_monitored_routes: ['/profile'],
             },
             params
@@ -494,7 +495,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_monitored_routes: [/\/profile/],
             },
             params
@@ -519,7 +520,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_monitored_routes: ['/profile'],
             },
             params
@@ -544,7 +545,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_monitored_routes: [/\/profile/],
             },
             params
@@ -569,7 +570,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_enforced_routes: ['/profile', '/login'],
                 px_monitored_routes: ['/'],
             },
@@ -595,7 +596,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_enforced_routes: [/\/profile/, /\/login/],
                 px_monitored_routes: [new RegExp(/^\/$/)],
             },
@@ -621,7 +622,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_enforced_routes: ['/profile', '/login'],
                 px_monitored_routes: ['/'],
             },
@@ -647,7 +648,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_enforced_routes: [/\/profile/, /\/login/],
                 px_monitored_routes: [new RegExp(/^\/$/)],
             },
@@ -673,7 +674,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_enforced_routes: ['/profile', '/login'],
             },
             params
@@ -698,7 +699,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: 1,
+                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
                 px_enforced_routes: [[/\/profile/, /\/login/]],
             },
             params

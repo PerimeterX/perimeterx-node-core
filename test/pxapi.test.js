@@ -8,6 +8,7 @@ const pxapi = rewire('../lib/pxapi');
 const originalTokenValidator = require('../lib/pxoriginaltoken');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
+const { ModuleMode } = require('../lib/enums/ModuleMode');
 
 describe('PX API - pxapi.js', () => {
     let params;
@@ -27,7 +28,7 @@ describe('PX API - pxapi.js', () => {
             px_ip_headers: ['x-px-true-ip'],
             px_max_activity_batch_size: 1,
             px_module_enabled: true,
-            px_module_mode: 1,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
         };
 
         logger = new PxLogger(params);

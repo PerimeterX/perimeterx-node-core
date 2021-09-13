@@ -5,6 +5,7 @@ const rewire = require('rewire');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
 const fs = require('fs');
+const { ModuleMode } = require('../lib/enums/ModuleMode');
 
 describe('PX Configurations - pxconfig.js', () => {
     let params, logger;
@@ -20,7 +21,7 @@ describe('PX Configurations - pxconfig.js', () => {
             px_ip_headers: ['x-px-true-ip'],
             px_max_activity_batch_size: 1,
             px_custom_request_handler: null,
-            px_module_mode: 1,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
         };
         logger = new PxLogger(params);
     });
@@ -120,13 +121,13 @@ describe('PX Configurations - pxconfig.js', () => {
         params.configFilePath = './test/files/config-1.json';
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.MODULE_MODE.should.equal(0);
+        conf.MODULE_MODE.should.equal(ModuleMode.MONITOR);
     });
 
     it('Load Non-Existing Config file', () => {
         params.configFilePath = './test/files/config-notexist.json';
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.MODULE_MODE.should.equal(1);
+        conf.MODULE_MODE.should.equal(ModuleMode.ACTIVE_BLOCKING);
     });
 });
