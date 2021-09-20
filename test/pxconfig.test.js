@@ -83,7 +83,7 @@ describe('PX Configurations - pxconfig.js', () => {
         params.px_logger_severity = LoggerSeverity.DEBUG;
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
-        conf.DEBUG_MODE.should.be.exactly(LoggerSeverity.DEBUG);
+        conf.LOGGER_SEVERITY.should.be.exactly(LoggerSeverity.DEBUG);
     });
 
     it('px_custom_logo should be overridden', () => {
