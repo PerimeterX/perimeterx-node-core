@@ -12,15 +12,15 @@ describe('PX Utils - pxutils.js', () => {
 
     beforeEach(() => {
         params = {
-            pxAppId: 'PX_APP_ID',
-            cookieSecretKey: 'PX_COOKIE_SECRET',
-            authToken: 'PX_AUTH_TOKEN',
-            sendPageActivities: true,
-            blockingScore: 60,
-            debugMode: true,
-            ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1,
-            enrichCustomParameters: enrichCustomParameters
+            px_app_id: 'PX_APP_ID',
+            px_cookie_secret: 'PX_COOKIE_SECRET',
+            px_auth_token: 'PX_AUTH_TOKEN',
+            px_send_async_activities_enabled: true,
+            px_blocking_score: 60,
+            px_logger_severity: true,
+            px_ip_headers: '',
+            px_max_activity_batch_size: 1,
+            px_enrich_custom_parameters: px_enrich_custom_parameters
         };
 
         const logger = new PxLogger(params);
@@ -47,7 +47,7 @@ describe('PX Utils - pxutils.js', () => {
 
 });
 
-function enrichCustomParameters(params, origReq) {
+function px_enrich_custom_parameters(params, origReq) {
     params['custom_param1'] = '1';
     params['custom_param2'] = '2';
     params['custom_param10'] = '10';
