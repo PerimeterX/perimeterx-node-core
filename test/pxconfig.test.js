@@ -119,14 +119,14 @@ describe('PX Configurations - pxconfig.js', () => {
     });
 
     it('Load Existing Config file', () => {
-        params.configFilePath = './test/files/config-1.json';
+        params.px_config_file_path = './test/files/config-1.json';
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.MODULE_MODE.should.equal(ModuleMode.MONITOR);
     });
 
     it('Load Non-Existing Config file', () => {
-        params.configFilePath = './test/files/config-notexist.json';
+        params.px_config_file_path = './test/files/config-notexist.json';
         const pxConfig = new PxConfig(params, logger);
         const conf = pxConfig.conf;
         conf.MODULE_MODE.should.equal(ModuleMode.ACTIVE_BLOCKING);
