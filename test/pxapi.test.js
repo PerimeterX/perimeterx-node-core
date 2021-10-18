@@ -8,6 +8,7 @@ const pxapi = rewire('../lib/pxapi');
 const originalTokenValidator = require('../lib/pxoriginaltoken');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
+const { ModuleMode } = require('../lib/enums/ModuleMode');
 
 describe('PX API - pxapi.js', () => {
     let params;
@@ -18,16 +19,16 @@ describe('PX API - pxapi.js', () => {
 
     beforeEach(() => {
         params = {
-            pxAppId: 'PX_APP_ID',
-            cookieSecretKey: 'kabum',
-            authToken: 'PX_AUTH_TOKEN',
-            sendPageActivities: true,
-            blockingScore: 60,
-            debugMode: true,
-            ipHeader: 'x-px-true-ip',
-            maxBufferLength: 1,
-            enableModule: true,
-            moduleMode: 1,
+            px_app_id: 'PX_APP_ID',
+            px_cookie_secret: 'kabum',
+            px_auth_token: 'PX_AUTH_TOKEN',
+            px_send_async_activities_enabled: true,
+            px_blocking_score: 60,
+            px_logger_severity: true,
+            px_ip_headers: ['x-px-true-ip'],
+            px_max_activity_batch_size: 1,
+            px_module_enabled: true,
+            px_module_mode: ModuleMode.ACTIVE_BLOCKING,
         };
 
         logger = new PxLogger(params);
