@@ -27,4 +27,5 @@ module.exports = {
     PxEnforcer: require('./lib/pxenforcer'),
     PxClient: require('./lib/pxclient'),
     PxCdEnforcer: require('./lib/pxcdenforcer'),
+    addNonce: require('./lib/nonce')
 };
