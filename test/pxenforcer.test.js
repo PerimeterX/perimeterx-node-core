@@ -9,6 +9,9 @@ const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
 const proxyquire = require('proxyquire');
 const { ModuleMode } = require('../lib/enums/ModuleMode');
+const Response = require('./mocks/response');
+const addNonce = require('../lib/nonce');
+const { CSP_HEADER, CSPRO_HEADER } = require('../lib/utils/constants');
 
 describe('PX Enforcer - pxenforcer.js', () => {
     let params, enforcer, req, stub, pxClient, pxLoggerSpy, logger;
@@ -804,4 +807,36 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
+    it('Should add Nonce to CSP header (script-src directive exists)', (done) => {
+        const nonce = 'ImN0nc3Value';
+        const headerWithoutNonce = 'connect-src \'self\' *.bazaarvoice.com *.google.com *.googleapis.com *.perimeterx.net *.px-cdn.net *.px-client.net; script-src \'self\' \'unsafe-eval\' \'unsafe-inline\' *.bazaarvoice.com *.forter.com *.google-analytics.com report-uri https://csp.px-cloud.net/report?report=1&id=8a3a7c5242c0e7646bd7d86284f408f6&app_id=PXFF0j69T5&p=d767ae06-b964-4b42-96a2-6d4089aab525';
+        const headerWithNonce = 'connect-src \'self\' *.bazaarvoice.com *.google.com *.googleapis.com *.perimeterx.net *.px-cdn.net *.px-client.net; script-src \'nonce-ImN0nc3Value\' \'self\' \'unsafe-eval\' \'unsafe-inline\' *.bazaarvoice.com *.forter.com *.google-analytics.com report-uri https://csp.px-cloud.net/report?report=1&id=8a3a7c5242c0e7646bd7d86284f408f6&app_id=PXFF0j69T5&p=d767ae06-b964-4b42-96a2-6d4089aab525';
+        nonceTestUtil(headerWithoutNonce, headerWithNonce);
+        done();
+    });
+
+    it('Should add Nonce to CSP header (script-src directive does not exists)', (done) => {
+        const headerWithoutNonce = 'connect-src \'self\' https://collector-px8u0i7rwc.px-cdn.net https://collector-px8u0i7rwc.px-cloud.net; report-uri https://csp.px-cloud.net/report?report=1&id=4bd43ac663997dde7c6a84abd14fdd7a&app_id=PX8U0i7rwC&p=70bb7c94-4807-4090-bea4-ffd1f7645126';
+        const headerWithNonce = 'connect-src \'self\' https://collector-px8u0i7rwc.px-cdn.net https://collector-px8u0i7rwc.px-cloud.net; script-src \'nonce-ImN0nc3Value\'; report-uri https://csp.px-cloud.net/report?report=1&id=4bd43ac663997dde7c6a84abd14fdd7a&app_id=PX8U0i7rwC&p=70bb7c94-4807-4090-bea4-ffd1f7645126';
+        nonceTestUtil(headerWithoutNonce, headerWithNonce);
+        done();
+    });
+
+    it('Should add Nonce to CSP header, CSP header empty', (done) => {
+        const headerWithoutNonce = ';';
+        const headerWithNonce = '; script-src \'nonce-ImN0nc3Value\';';
+        nonceTestUtil(headerWithoutNonce, headerWithNonce);
+        done();
+    });
 });
+
+const nonceTestUtil = (headerWithoutNonce, headerWithNonce) => {
+    const nonce = 'ImN0nc3Value';
+    const headers = { [CSP_HEADER]: headerWithoutNonce, [CSPRO_HEADER]: headerWithoutNonce };
+    const response = new Response(headers);
+    addNonce(response, nonce);
+
+    (response.getHeader(CSP_HEADER) === headerWithNonce).should.equal(true);
+    (response.getHeader(CSPRO_HEADER) === headerWithNonce).should.equal(true);
+};
