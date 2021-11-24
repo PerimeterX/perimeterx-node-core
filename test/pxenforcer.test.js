@@ -9,9 +9,10 @@ const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
 const proxyquire = require('proxyquire');
 const { ModuleMode } = require('../lib/enums/ModuleMode');
+const { ActivityType } = require('../lib/enums/ActivityType');
 const Response = require('./mocks/response');
 const addNonce = require('../lib/nonce');
-const { CSP_HEADER, CSPRO_HEADER } = require('../lib/utils/constants');
+const { CSP_HEADER, CSPRO_HEADER, DEFAULT_ADDITIONAL_ACTIVITY_HEADER_NAME, DEFAULT_ADDITIONAL_ACTIVITY_URL_HEADER_NAME } = require('../lib/utils/constants');
 
 describe('PX Enforcer - pxenforcer.js', () => {
     let params, enforcer, req, stub, pxClient, pxLoggerSpy, logger;
@@ -807,6 +808,27 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
+    it('Should add necessary headers to original request when px_additional_activity_header_enabled is true', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign(
+            { px_additional_activity_header_enabled: true },
+            params
+        );
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            const additionalActivity = JSON.parse(req.headers[DEFAULT_ADDITIONAL_ACTIVITY_HEADER_NAME]);
+            const additionalActivityUrl = new URL(req.headers[DEFAULT_ADDITIONAL_ACTIVITY_URL_HEADER_NAME]);
+            (additionalActivity.type).should.equal(ActivityType.ADDITIONAL_S2S);
+            (additionalActivityUrl != null).should.equal(true);
+            done();
+        });
+    })
 
     it('Should add Nonce to CSP header (script-src directive exists)', (done) => {
         const nonce = 'ImN0nc3Value';
