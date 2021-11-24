@@ -8,6 +8,7 @@ const pxhttpc = require('../lib/pxhttpc');
 const PxClient = rewire('../lib/pxclient');
 const PxEnforcer = require('../lib/pxenforcer');
 const proxyquire = require('proxyquire');
+const { DEFAULT_ADDITIONAL_ACTIVITY_HEADER_NAME, DEFAULT_ADDITIONAL_ACTIVITY_URL_HEADER_NAME } = require('../lib/utils/constants');
 
 describe('PX Enforcer - pxenforcer.js', () => {
     let params, enforcer, req, stub, pxClient, pxLoggerSpy, logger;
@@ -803,4 +804,25 @@ describe('PX Enforcer - pxenforcer.js', () => {
             done();
         });
     });
+
+    it('Should add necessary headers to original request when px_additional_activity_header_enabled is true', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = Object.assign(
+            { px_additional_activity_header_enabled: true },
+            params
+        );
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, (error, response) => {
+            const additionalActivity = JSON.parse(req.headers[DEFAULT_ADDITIONAL_ACTIVITY_HEADER_NAME]);
+            const additionalActivityUrl = new URL(req.headers[DEFAULT_ADDITIONAL_ACTIVITY_URL_HEADER_NAME]);
+            (additionalActivity.type).should.equal('additional_s2s');
+            (additionalActivityUrl != null).should.equal(true);
+            done();
+        });
+    })
 });
