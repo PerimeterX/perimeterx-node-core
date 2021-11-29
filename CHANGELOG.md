@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0] - 2021-11-28
+
+### Changed
+
+-   Login credentials extraction sends hashed credentials (`creds`) instead of `pass`
+-   Login credentials extraction normalizes username field to lowercase prior to hashing
+-   Login credentials extraction fields align with spec (all `snake_case`, not `camelCase`)
+-   Login credentials extraction handles body encoding based on `Content-Type` request header
+
+### Added
+
+-   Login credentials extraction paths are added as sensitive routes automatically
+-   Added `raw_username` field with default value `null` to `additional_s2s` activity
+
+
 ## [3.0.3] - 2021-11-24
 
 ### Added
