@@ -45,6 +45,19 @@ describe('PX Utils - pxutils.js', () => {
         return done();
     });
 
+    it('should extract graphql data from the request body properly', () => {
+        const GRAPHQL_OPERATION_NAME = 'OperationName';
+        const GRAPHQL_OPERATION_TYPE = 'mutation';
+        const req = {
+            path: '/some/path/with/graphql',
+            body: {
+                query: `${GRAPHQL_OPERATION_TYPE} ${GRAPHQL_OPERATION_NAME} {\n    __typename\n}`
+            }
+        }
+        const graphqlData = pxutil.getGraphqlData(req);
+        graphqlData.operationType.should.be.exactly(GRAPHQL_OPERATION_TYPE);
+        graphqlData.operationName.should.be.exactly(GRAPHQL_OPERATION_NAME);
+    });
 });
 
 function px_enrich_custom_parameters(params, origReq) {
