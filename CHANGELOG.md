@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - server_info_origin to all Enforcer activities, indicates which CDN POP/Datacenter the request hit
+- sensitive route based on GraphQL payload
+
+### Fixed
+
+- Enforced route bugfix
 
 ## [3.1.0] - 2021-11-28
 
