@@ -809,15 +809,27 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 
-    it('Should add necessary headers to original request when px_additional_activity_header_enabled is true', (done) => {
+    it('Should add necessary headers to original request when px_additional_s2s_activity_header_enabled is true', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             return callback ? callback(null, data) : '';
         });
 
-        const curParams = Object.assign(
-            { px_additional_activity_header_enabled: true },
-            params
-        );
+        const curParams = Object.assign({
+            px_additional_s2s_activity_header_enabled: true,
+            px_login_credentials_extraction_enabled: true,
+            px_login_credentials_extraction: [{
+                path: '/login',
+                method: 'post',
+                sent_through: 'body',
+                user_field: 'username',
+                pass_field: 'password'
+            }]
+        }, params);
+
+        req.method = 'POST';
+        req.originalUrl = '/login';
+        req.path = req.originalUrl.substring(req.originalUrl.lastIndexOf('/'));
+        req.body = { username: 'pxUser', password: '1234' };
 
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
         enforcer = new pxenforcer(curParams, pxClient);
