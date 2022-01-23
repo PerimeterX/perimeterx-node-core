@@ -669,7 +669,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     });
 
-    it('should not enforce a route not specified in enforced specific routes', (done) => {
+    it('should enforce a route not in enforced specific routes even when in monitor mode', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -678,23 +678,23 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
+                px_module_mode: ModuleMode.MONITOR,
                 px_enforced_routes: ['/profile', '/login'],
             },
             params
         );
 
-        req.originalUrl = '/';
+        req.originalUrl = '/login';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             should(error).not.be.ok();
-            (response === undefined).should.equal(true);
+            (response === undefined).should.equal(false);
             done();
         });
     });
 
-    it('should not enforce a route not specified in enforced specific routes regex', (done) => {
+    it('should enforce a route specified in enforced specific routes regex when in monitor mode', (done) => {
         stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
             data.score = 100;
             data.action = 'c';
@@ -703,18 +703,18 @@ describe('PX Enforcer - pxenforcer.js', () => {
 
         const curParams = Object.assign(
             {
-                px_module_mode: ModuleMode.ACTIVE_BLOCKING,
-                px_enforced_routes: [[/\/profile/, /\/login/]],
+                px_module_mode: ModuleMode.MONITOR,
+                px_enforced_routes: [/\/profile/, /\/login/],
             },
             params
         );
 
-        req.originalUrl = '/';
+        req.originalUrl = '/user/123/profile';
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             should(error).not.be.ok();
-            (response === undefined).should.equal(true);
+            (response === undefined).should.equal(false);
             done();
         });
     });
