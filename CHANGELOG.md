@@ -21,7 +21,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Login credentials extraction handles body encoding based on `Content-Type` request header
 - Successful login credentials extraction automatically triggers risk_api call without needing to enable sensitive routes
-- Enforced routes feature no longer filters out unenforced routes
+
+### Fixed
+
+- Enforced routes work in monitor mode
+- Bypass monitor header works with configured monitored routes
 
 ## [3.1.2] - 2022-01-18
 
