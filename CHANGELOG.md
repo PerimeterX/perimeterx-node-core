@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.1] - 2022-01-31
+
+### Added
+
+- Support for dynamic cookie signing with IP (requires PXHD)
+
 ## [3.2.0] - 2022-01-24
 
 ### Added
