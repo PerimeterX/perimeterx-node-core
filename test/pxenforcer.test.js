@@ -243,7 +243,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
-            (response.body.indexOf('Please verify you are a human') > -1).should.equal(true);
+            (response.body.indexOf('Press & Hold to confirm') > -1).should.equal(true);
             reqStub.restore();
             done();
         });
