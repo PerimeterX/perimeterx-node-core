@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.4.1] - 2022-05-18
+
+### Added
+
+- Update block page to support error handling for mobile.
 
 ## [3.4.0] - 2022-05-1
 
