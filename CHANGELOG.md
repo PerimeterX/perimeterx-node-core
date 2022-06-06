@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.4.2] - 2022-06-06
+
+### Fixed
+
+- GraphQL - parsed operation name issue
+
 ## [3.4.1] - 2022-05-18
 
 ### Added
