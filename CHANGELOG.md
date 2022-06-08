@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.4.3] - ???
+
+### Fixed
+
+- pxhd cookie is now set with SameSite=Lax
+
 ## [3.4.2] - 2022-06-06
 
 ### Fixed
