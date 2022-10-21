@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.0] - 2022-xx-xx
+
+### Added
+
+- Support for `px_custom_first_party_path` configuration
+
 ## [3.4.3] - 2022-06-30
 
 ### Fixed
