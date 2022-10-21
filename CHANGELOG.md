@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Support for `px_custom_first_party_path` configuration
 
+### Changed
+
+- Updated dependencies
+
 ## [3.4.3] - 2022-06-30
 
 ### Fixed
