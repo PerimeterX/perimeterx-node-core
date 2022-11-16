@@ -842,6 +842,42 @@ describe('PX Enforcer - pxenforcer.js', () => {
         });
     })
 
+    it('Should call px_modify_context if set', (done) => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const modifyCtx = sinon.stub().callsFake((ctx) => ctx.sensitiveRoute = true);
+        const curParams = {
+            ...params,
+            px_modify_context: modifyCtx,
+        };
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
+        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer.enforce(req, null, () => {
+            (modifyCtx.calledOnce).should.equal(true);
+            (req.locals.pxCtx.sensitiveRoute).should.equal(true);
+            done();
+        });
+    });
+
+    it('should not throw exception if there is an error in px_modify_context', () => {
+        stub = sinon.stub(pxhttpc, 'callServer').callsFake((data, headers, uri, callType, config, callback) => {
+            return callback ? callback(null, data) : '';
+        });
+
+        const curParams = {
+            ...params,
+            px_modify_context: sinon.stub().throws(),
+        };
+
+        const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
+        enforcer = new pxenforcer(curParams, pxClient);
+        const enforceFunc = enforcer.enforce.bind(enforcer, req, null, () => {});
+        (enforceFunc).should.not.throw();
+    });
+
     it('Should add Nonce to CSP header (script-src directive exists)', (done) => {
         const nonce = 'ImN0nc3Value';
         const headerWithoutNonce = 'connect-src \'self\' *.bazaarvoice.com *.google.com *.googleapis.com *.perimeterx.net *.px-cdn.net *.px-client.net; script-src \'self\' \'unsafe-eval\' \'unsafe-inline\' *.bazaarvoice.com *.forter.com *.google-analytics.com report-uri https://csp.px-cloud.net/report?report=1&id=8a3a7c5242c0e7646bd7d86284f408f6&app_id=PXFF0j69T5&p=d767ae06-b964-4b42-96a2-6d4089aab525';
