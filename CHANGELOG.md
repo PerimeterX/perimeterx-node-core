@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [X.X.X] - XXXX-XX-XX
+
+- support configurable graphql paths
+- bugfix - ignore whitespaces at start of operation name
+
 ## [3.6.0] - 2022-11-17
 
 ### Added
