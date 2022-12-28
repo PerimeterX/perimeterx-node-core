@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - full scanning the graphql query to parse the operation name.
-- 
+
 ### Fixed
 - ignore whitespaces at start of operation name
 - 
