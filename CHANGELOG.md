@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - ignore whitespaces at start of operation name
-- 
+
 ## [3.6.0] - 2022-11-17
 
 ### Added
