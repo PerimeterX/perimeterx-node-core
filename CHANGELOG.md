@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - support configurable graphql paths
-- supports multiple queries (Apollo)
+- support multiple queries (Apollo)
 
 ### Changed
 - full scanning the graphql query to parse the operation name.
