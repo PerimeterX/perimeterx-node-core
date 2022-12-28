@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - support configurable graphql paths
 - bugfix - ignore whitespaces at start of operation name
+- supports multiple queries (Apollo)
+- full scanning the graphql query to parse the operation name.
 
 ## [3.6.0] - 2022-11-17
 
