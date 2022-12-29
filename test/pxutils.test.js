@@ -128,12 +128,19 @@ describe('PX Utils - pxutils.js', () => {
         assert.match(isSensitiveGraphqlOperation(gqlData, {
             ...config,
             SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query'],
-        }), false);
+        }), true);
         assert.match(isSensitiveGraphqlOperation({
             ...gqlData,
             operationName: 'q2',
-        }, config), false);
+        }, config), true);
 
+        assert.match(isSensitiveGraphqlOperation({
+            ...gqlData,
+            operationName: 'q2',
+        }, {
+            ...config,
+            SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query']
+        }), false);
     });
 });
 
