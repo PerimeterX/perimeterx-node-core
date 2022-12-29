@@ -5,6 +5,7 @@ const pxutil = require('../lib/pxutil');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
 const { assert } = require('sinon');
+const { isSensitiveGraphqlOperation } = require('../lib/pxutil');
 
 describe('PX Utils - pxutils.js', () => {
     let pxConfig;
@@ -62,9 +63,9 @@ describe('PX Utils - pxutils.js', () => {
     it('extract with spaces', () => {
         const gqlObj = {
             query: '\n   query    q1 { \n abc \n }',
-            operationName: 'q1'
+            operationName: 'q1',
         };
-        
+
         const graphqlData = pxutil.getGraphqlData(gqlObj);
         graphqlData.operationName.should.be.exactly('q1');
         graphqlData.operationType.should.be.exactly('query');
@@ -73,7 +74,7 @@ describe('PX Utils - pxutils.js', () => {
     it('extract with many queries', () => {
         const gqlObj = {
             query: 'query q1 { \n abc \n }\nmutation q2 {\n def\n }',
-            operationName: 'q2'
+            operationName: 'q2',
         };
 
         const graphqlData = pxutil.getGraphqlData(gqlObj);
@@ -83,7 +84,7 @@ describe('PX Utils - pxutils.js', () => {
 
     it('extract with only one query without given operationName', () => {
         const gqlObj = {
-            query: 'query q1 { \n abc \n }'
+            query: 'query q1 { \n abc \n }',
         };
 
         const graphqlData = pxutil.getGraphqlData(gqlObj);
@@ -93,14 +94,47 @@ describe('PX Utils - pxutils.js', () => {
 
     it('should return null when multiple operations without explicitly specified', () => {
         const gqlObj = {
-            query: 'query q1 { \n abc \n }\nmutation q2 {\n def\n }'
+            query: 'query q1 { \n abc \n }\nmutation q2 {\n def\n }',
         };
 
         const graphqlData = pxutil.getGraphqlData(gqlObj);
         assert.match(graphqlData, null);
     });
 
-    it(``);
+    it('should include variables', () => {
+        const gqlObj = {
+            query: 'query q1(m: $x) { \n abc \n }\nmutation q2 {\n def\n }',
+            operationName: 'q1',
+            variables: { x: 2 },
+        };
+        const graphqlData = pxutil.getGraphqlData(gqlObj);
+        graphqlData.operationName.should.be.exactly('q1');
+        graphqlData.operationType.should.be.exactly('query');
+        assert.match(Object.keys(graphqlData.variables).length === 1 && graphqlData.variables.x === 2, true);
+    });
+
+    it(`check for sensitive operation`, () => {
+        const gqlData = {
+            operationName: 'q1',
+            operationType: 'mutation',
+            variables: { x: 2 },
+        };
+        const config = {
+            SENSITIVE_GRAPHQL_OPERATION_TYPES: ['mutation'],
+            SENSITIVE_GRAPHQL_OPERATION_NAMES: ['q1'],
+        };
+
+        assert.match(isSensitiveGraphqlOperation(gqlData, config), true);
+        assert.match(isSensitiveGraphqlOperation(gqlData, {
+            ...config,
+            SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query'],
+        }), false);
+        assert.match(isSensitiveGraphqlOperation({
+            ...gqlData,
+            operationName: 'q2',
+        }, config), false);
+
+    });
 });
 
 function px_enrich_custom_parameters(params, origReq) {
