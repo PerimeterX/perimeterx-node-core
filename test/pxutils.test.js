@@ -105,12 +105,26 @@ describe('PX Utils - pxutils.js', () => {
         const gqlObj = {
             query: 'query q1(m: $x) { \n abc \n }\nmutation q2 {\n def\n }',
             operationName: 'q1',
-            variables: { x: 2 },
+            variables: { x: 2, y: 3, z: 4 },
         };
         const graphqlData = pxutil.getGraphqlData(gqlObj);
         graphqlData.operationName.should.be.exactly('q1');
         graphqlData.operationType.should.be.exactly('query');
-        assert.match(Object.keys(graphqlData.variables).length === 1 && graphqlData.variables.x === 2, true);
+        assert.match(graphqlData.variables[0] === 'x' &&
+            graphqlData.variables[1] === 'y' &&
+            graphqlData.variables[2] === 'z', true);
+    });
+
+    it('sensitive information is not present in the graphql data parsing', () => {
+        const gqlObj = {
+            query: 'query q1(m: $email) { \n abc \n }\nmutation q2 {\n def\n }',
+            operationName: 'q1',
+            variables: { email: 'test@mail.com', password: 'Password1' },
+        };
+
+        const graphqlData = pxutil.getGraphqlData(gqlObj);
+        assert.match(!!graphqlData.toString().match(/test@mail\.com/), false);
+        assert.match(!!graphqlData.toString().match(/Password1/), false);
     });
 
     it(`check for sensitive operation`, () => {
