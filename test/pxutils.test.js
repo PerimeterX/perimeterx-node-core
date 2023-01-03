@@ -110,9 +110,8 @@ describe('PX Utils - pxutils.js', () => {
         const graphqlData = pxutil.getGraphqlData(gqlObj);
         graphqlData.operationName.should.be.exactly('q1');
         graphqlData.operationType.should.be.exactly('query');
-        assert.match(graphqlData.variables[0] === 'x' &&
-            graphqlData.variables[1] === 'y' &&
-            graphqlData.variables[2] === 'z', true);
+        assert.match(graphqlData.variables.length === 3 &&
+            ['x', 'y', 'z'].every((e, i) => e === graphqlData.variables[i]), true);
     });
 
     it('sensitive information is not present in the graphql data parsing', () => {
@@ -153,7 +152,7 @@ describe('PX Utils - pxutils.js', () => {
             operationName: 'q2',
         }, {
             ...config,
-            SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query']
+            SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query'],
         }), false);
     });
 });
