@@ -1,10 +1,10 @@
 'use strict';
 
 const should = require('should');
+const { assert } = require('sinon');
 const pxutil = require('../lib/pxutil');
 const PxConfig = require('../lib/pxconfig');
 const PxLogger = require('../lib/pxlogger');
-const { assert } = require('sinon');
 const { isSensitiveGraphqlOperation } = require('../lib/pxutil');
 
 describe('PX Utils - pxutils.js', () => {
@@ -138,7 +138,7 @@ describe('PX Utils - pxutils.js', () => {
                         mostInnerKey: null,
                     },
                     key3: 10,
-                    emptyKey: {}
+                    emptyKey: {},
                 },
             },
         };
@@ -150,7 +150,7 @@ describe('PX Utils - pxutils.js', () => {
         assert.match(!!graphqlData.toString().match(/10/), false);
         assert.match(!!graphqlData.toString().match(/null/), false);
 
-        const expected  = ['email', 'password', 'data.key1', 'data.key2.mostInnerKey', 'data.key3', 'data.emptyKey'];
+        const expected = ['email', 'password', 'data.key1', 'data.key2.mostInnerKey', 'data.key3', 'data.emptyKey'];
         assert.match(graphqlData.variables.length === expected.length &&
             expected.every((e, i) => e === graphqlData.variables[i]), true);
     });
