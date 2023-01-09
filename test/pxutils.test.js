@@ -80,6 +80,7 @@ describe('PX Utils - pxutils.js', () => {
         const graphqlData = pxutil.getGraphqlData(gqlObj);
         graphqlData.operationName.should.be.exactly('q2');
         graphqlData.operationType.should.be.exactly('mutation');
+        assert.match(Object.keys(graphqlData.variables).length === 0, true);
     });
 
     it('extract with only one query without given operationName', () => {
@@ -124,6 +125,34 @@ describe('PX Utils - pxutils.js', () => {
         const graphqlData = pxutil.getGraphqlData(gqlObj);
         assert.match(!!graphqlData.toString().match(/test@mail\.com/), false);
         assert.match(!!graphqlData.toString().match(/Password1/), false);
+    });
+
+    it('nested values should extract keys recursively', () => {
+        const gqlObj = {
+            query: 'query q1(m: $email) { \n abc \n }\nmutation q2 {\n def\n }',
+            operationName: 'q1',
+            variables: {
+                email: 'test@mail.com', password: 'Password1', data: {
+                    key1: 'test',
+                    key2: {
+                        mostInnerKey: null,
+                    },
+                    key3: 10,
+                    emptyKey: {}
+                },
+            },
+        };
+
+        const graphqlData = pxutil.getGraphqlData(gqlObj);
+        assert.match(!!graphqlData.toString().match(/test@mail\.com/), false);
+        assert.match(!!graphqlData.toString().match(/Password1/), false);
+        assert.match(!!graphqlData.toString().match(/test/), false);
+        assert.match(!!graphqlData.toString().match(/10/), false);
+        assert.match(!!graphqlData.toString().match(/null/), false);
+
+        const expected  = ['email', 'password', 'data.key1', 'data.key2.mostInnerKey', 'data.key3', 'data.emptyKey'];
+        assert.match(graphqlData.variables.length === expected.length &&
+            expected.every((e, i) => e === graphqlData.variables[i]), true);
     });
 
     it(`check for sensitive operation`, () => {
