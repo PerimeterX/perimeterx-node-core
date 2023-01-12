@@ -15,8 +15,8 @@ describe('Graphql Testing', () => {
             },
         };
         const graphqlData = pxutil.getGraphqlData(req.body);
-        graphqlData.operationType.should.be.exactly(GRAPHQL_OPERATION_TYPE);
-        graphqlData.operationName.should.be.exactly(GRAPHQL_OPERATION_NAME);
+        graphqlData.type.should.be.exactly(GRAPHQL_OPERATION_TYPE);
+        graphqlData.name.should.be.exactly(GRAPHQL_OPERATION_NAME);
     });
 
     it('extract with spaces', () => {
@@ -26,8 +26,8 @@ describe('Graphql Testing', () => {
         };
 
         const graphqlData = pxutil.getGraphqlData(gqlObj);
-        graphqlData.operationName.should.be.exactly('q1');
-        graphqlData.operationType.should.be.exactly('query');
+        graphqlData.name.should.be.exactly('q1');
+        graphqlData.type.should.be.exactly('query');
     });
 
     it('extract with many queries', () => {
@@ -37,8 +37,8 @@ describe('Graphql Testing', () => {
         };
 
         const graphqlData = pxutil.getGraphqlData(gqlObj);
-        graphqlData.operationName.should.be.exactly('q2');
-        graphqlData.operationType.should.be.exactly('mutation');
+        graphqlData.name.should.be.exactly('q2');
+        graphqlData.type.should.be.exactly('mutation');
         assert.match(Object.keys(graphqlData.variables).length === 0, true);
     });
 
@@ -48,8 +48,8 @@ describe('Graphql Testing', () => {
         };
 
         const graphqlData = pxutil.getGraphqlData(gqlObj);
-        graphqlData.operationName.should.be.exactly('q1');
-        graphqlData.operationType.should.be.exactly('query');
+        graphqlData.name.should.be.exactly('q1');
+        graphqlData.type.should.be.exactly('query');
     });
 
     it('should return null when multiple operations without explicitly specified', () => {
@@ -68,8 +68,8 @@ describe('Graphql Testing', () => {
             variables: { x: 2, y: 3, z: 4 },
         };
         const graphqlData = pxutil.getGraphqlData(gqlObj);
-        graphqlData.operationName.should.be.exactly('q1');
-        graphqlData.operationType.should.be.exactly('query');
+        graphqlData.name.should.be.exactly('q1');
+        graphqlData.type.should.be.exactly('query');
         assert.match(graphqlData.variables.length === 3 &&
             ['x', 'y', 'z'].every((e, i) => e === graphqlData.variables[i]), true);
     });
@@ -116,8 +116,8 @@ describe('Graphql Testing', () => {
 
     it(`check for sensitive operation`, () => {
         const gqlData = {
-            operationName: 'q1',
-            operationType: 'mutation',
+            name: 'q1',
+            type: 'mutation',
             variables: { x: 2 },
         };
         const config = {
@@ -132,12 +132,12 @@ describe('Graphql Testing', () => {
         }), true);
         assert.match(isSensitiveGraphqlOperation({
             ...gqlData,
-            operationName: 'q2',
+            name: 'q2',
         }, config), true);
 
         assert.match(isSensitiveGraphqlOperation({
             ...gqlData,
-            operationName: 'q2',
+            name: 'q2',
         }, {
             ...config,
             SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query'],
@@ -150,14 +150,13 @@ describe('Graphql Testing', () => {
         const graphqlData1 = pxutil.getGraphqlData(gql1);
         const graphqlData2 = pxutil.getGraphqlData(gql2);
 
-        assert.match(graphqlData1.operationName === 'SiteInfo'
-            && graphqlData1.operationType === 'query'
+        assert.match(graphqlData1.name === 'SiteInfo'
+            && graphqlData1.type === 'query'
             && Array.isArray(graphqlData1.variables)
             && graphqlData1.variables.length === 0, true);
-        assert.match(graphqlData2.operationName === 'CategoryBrowsePageContent'
-            && graphqlData2.operationType === 'query'
+        assert.match(graphqlData2.name === 'CategoryBrowsePageContent'
+            && graphqlData2.type === 'query'
             && graphqlData2.variables[0] === 'categoryId'
             && graphqlData2.variables.length === 1, true);
-
     });
 });
