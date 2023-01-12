@@ -1,6 +1,8 @@
 const pxutil = require('../lib/pxutil');
 const { assert } = require('sinon');
 const { isSensitiveGraphqlOperation } = require('../lib/pxutil');
+const { largeGraphqlObject, largeGraphqlObject2 } = require('./mocks/graphqlQuery');
+
 describe('Graphql Testing', () => {
 
     it('should extract graphql data from the request body properly', () => {
@@ -140,5 +142,22 @@ describe('Graphql Testing', () => {
             ...config,
             SENSITIVE_GRAPHQL_OPERATION_TYPES: ['query'],
         }), false);
+    });
+
+    it('should parse correctly large queries', () => {
+        const gql1 = largeGraphqlObject;
+        const gql2 = largeGraphqlObject2;
+        const graphqlData1 = pxutil.getGraphqlData(gql1);
+        const graphqlData2 = pxutil.getGraphqlData(gql2);
+
+        assert.match(graphqlData1.operationName === 'SiteInfo'
+            && graphqlData1.operationType === 'query'
+            && Array.isArray(graphqlData1.variables)
+            && graphqlData1.variables.length === 0, true);
+        assert.match(graphqlData2.operationName === 'CategoryBrowsePageContent'
+            && graphqlData2.operationType === 'query'
+            && graphqlData2.variables[0] === 'categoryId'
+            && graphqlData2.variables.length === 1, true);
+
     });
 });
