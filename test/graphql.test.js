@@ -73,7 +73,10 @@ describe('Graphql Testing', () => {
         assert.match(graphqlData.variables.length === 3 &&
             ['x', 'y', 'z'].every((e, i) => e === graphqlData.variables[i]), true);
     });
-
+    it('isSensitive should return false when no graphql operation', () => {
+        const sensitiveGraphqlOperation = pxutil.isSensitiveGraphqlOperation(null, {});
+        assert.match(sensitiveGraphqlOperation, false);
+    });
     it('sensitive information is not present in the graphql data parsing', () => {
         const gqlObj = {
             query: 'query q1(m: $email) { \n abc \n }\nmutation q2 {\n def\n }',
