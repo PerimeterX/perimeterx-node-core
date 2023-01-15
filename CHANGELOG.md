@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [X.X.X] - XXXX-XX-XX
+
+### Added
+- support configurable graphql paths
+- support multiple queries (Apollo)
+
+### Changed
+- full scanning the graphql query to parse the operation name.
+
+### Fixed
+- ignore whitespaces at start of operation name
+
 ## [3.6.0] - 2022-11-17
 
 ### Added
