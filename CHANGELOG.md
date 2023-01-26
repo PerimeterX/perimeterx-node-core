@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.8.0] - 2023-01-25
 
 ### Added
-- support for Account Defender.
+- Support User Identifiers: CTS and JWT.
 
 ## [3.7.0] - 2023-01-15
 
