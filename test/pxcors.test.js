@@ -113,8 +113,7 @@ describe('PX Cors - pxCors.js', () => {
 
         req.headers = Object.assign(req.headers, { 'access-control-request-method': 'get' });
 
-        const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
-        enforcer = new pxenforcer(curParams, pxClient);
+        enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (response) => {
             (response !== undefined).should.equal(true);
             done();
