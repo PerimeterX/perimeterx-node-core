@@ -351,7 +351,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             should.exist(response);
-            should.equal(response.header.value, 'text/html');
+            should.equal(response.headers['Content-Type'], 'text/html');
             reqStub.restore();
             done();
         });
@@ -377,7 +377,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new PxEnforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             should.exist(response);
-            should.equal(response.header.value, 'application/json');
+            should.equal(response.headers['Content-Type'], 'application/json');
             reqStub.restore();
             done();
         });
