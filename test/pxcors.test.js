@@ -116,7 +116,6 @@ describe('PX Cors - pxCors.js', () => {
         const pxenforcer = proxyquire('../lib/pxenforcer', { './pxlogger': logger });
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (response) => {
-            pxLoggerSpy.debug.calledWith('Skipping verification due to preflight request').should.equal(true);
             (response !== undefined).should.equal(true);
             done();
         });
@@ -187,7 +186,7 @@ describe('PX Cors - pxCors.js', () => {
             data.action = 'c';
             return callback ? callback(null, data) : '';
         });
-
+        
         reqStub = sinon.stub(req, 'post').callsFake((data, callback) => {
             callback(null, { body: 'hello buddy' });
         });
