@@ -30,6 +30,15 @@ describe('Graphql Testing', () => {
         graphqlData.type.should.be.exactly('query');
     });
 
+    it('should extract operation name if !query', () => {
+        const gqlObj = {
+            operationName: 'q1',
+        };
+
+        const graphqlData = pxutil.getGraphqlData(gqlObj);
+        graphqlData.name.should.be.exactly('q1');
+    });
+
     it('extract with many queries', () => {
         const gqlObj = {
             query: 'query q1 { \n abc \n }\nmutation q2 {\n def\n }',
