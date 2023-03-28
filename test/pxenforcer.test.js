@@ -847,7 +847,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
             return callback ? callback(null, data) : '';
         });
 
-        const modifyCtx = sinon.stub().callsFake((ctx) => ctx.sensitiveRoute = true);
+        const modifyCtx = sinon.stub().callsFake((ctx) => ctx.sensitiveRequest = true);
         const curParams = {
             ...params,
             px_modify_context: modifyCtx,
@@ -857,7 +857,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, () => {
             (modifyCtx.calledOnce).should.equal(true);
-            (req.locals.pxCtx.sensitiveRoute).should.equal(true);
+            (req.locals.pxCtx.sensitiveRequest).should.equal(true);
             done();
         });
     });
