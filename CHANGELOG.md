@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2023-03-28
+
+### Added
+- Support for handle graphQL request with empty operation name or type
+- Support custom is sensitive request via function
+
 ## [3.9.0] - 2023-01-29
 
 ### Added
