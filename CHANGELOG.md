@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.0.0] - 2023-03-28
 
 ### Added
-- Support for handling graphQL requests with empty operation name or type
+- Support for handling graphQL requests with empty query field
 - Support custom is sensitive request via function
 
 ## [3.9.0] - 2023-01-29
