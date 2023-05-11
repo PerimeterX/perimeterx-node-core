@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.XX.XX] - 2023-XX-XX
+
+### Fixed
+- Added PXHD from risk response to the async activities
 
 ## [3.10.1] - 2023-03-29
 
