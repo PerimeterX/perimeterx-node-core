@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## [3.12.0] - 2023-XX-XX
+
+### Added 
+- Support for header-based logger feature
+
 ## [3.11.0] - 2023-05-16
 
 ### Changed

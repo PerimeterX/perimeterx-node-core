@@ -24,7 +24,6 @@ describe('PX Logger - pxlogger.js', () => {
     it('sets default properties', (done) => {
         logger = new PxLogger(params);
 
-        logger.debugMode.should.equal(false);
         logger.appId.should.equal('PX_APP_ID');
         logger.internalLogger.should.be.exactly(console);
         done();
@@ -47,8 +46,6 @@ describe('PX Logger - pxlogger.js', () => {
     it('does not call console.info when debugMode is false', (done) => {
         params.px_logger_severity = false;
         logger = new PxLogger(params);
-
-        logger.debugMode.should.equal(false);
 
         logger.error('there was an error');
         console.error.calledOnce.should.equal(true);
