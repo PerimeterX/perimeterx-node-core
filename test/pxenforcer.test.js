@@ -433,7 +433,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             should(error).not.be.ok();
-            pxLoggerSpy.debug.calledWith('Found whitelist route /profile').should.equal(true);
+            pxLoggerSpy.debug.calledWith('Filter request due to whitelist route /profile').should.equal(true);
             (response === undefined).should.equal(true);
             done();
         });
@@ -459,7 +459,7 @@ describe('PX Enforcer - pxenforcer.js', () => {
         enforcer = new pxenforcer(curParams, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             should(error).not.be.ok();
-            pxLoggerSpy.debug.calledWith('Found whitelist route by Regex /profile').should.equal(true);
+            pxLoggerSpy.debug.calledWith('Filter request due to whitelist route by Regex /profile').should.equal(true);
             (response === undefined).should.equal(true);
             done();
         });
