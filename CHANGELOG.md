@@ -5,11 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.11.1] - 2023-12-10
+## [3.12.0] - 2023-XX-XX
 
-### Added
+### Added 
+- Support for header-based logger feature
+- Added `risk_start_time` and `enforcer_start_time` fields to enforcer activities.
+- Added `failOnEmptyBody` flag for `callServer` to specify wether or not a request should fail if it has no body.
 
-- `failOnEmptyBody` flag for `callServer` to specify wether or not a request should fail if it has no body.
+### Changed
+- Changed the structure of the headers field on async activities to array
 
 ## [3.11.0] - 2023-05-16
 
