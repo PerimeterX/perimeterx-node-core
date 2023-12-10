@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.11.1] - 2023-12-10
+
+### Added
+
+- `failOnEmptyBody` flag for `callServer` to specify wether or not a request should fail if it has no body.
+
 ## [3.11.0] - 2023-05-16
 
 ### Changed
