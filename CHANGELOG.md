@@ -19,9 +19,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added 
 - Support for header-based logger feature
 - Added `risk_start_time` and `enforcer_start_time` fields to enforcer activities.
+- Updated the configuration of PX first-party requests to include a connection timeout
 
 ### Changed
 - Changed the structure of the headers field on async activities to array
+- Updated the captcha template to handle empty captcha responses
 
 ## [3.11.0] - 2023-05-16
 
