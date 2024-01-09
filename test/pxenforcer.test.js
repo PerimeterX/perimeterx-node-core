@@ -100,7 +100,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const reqStub = sinon.stub(request, 'get').callsFake((data, config, callback) => {
             callback(null, { headers: { 'x-px-johnny': '1' }, body: 'hello buddy', proxy: '' });
         });
-        req.originalUrl = '/_APP_ID/init.js';
+        req.path = '/_APP_ID/init.js';
+        req.originalUrl = `${req.protocol}://${req.hostname}${req.path}`;
         enforcer = new PxEnforcer(params, pxClient);
         enforcer.enforce(req, null, (error, response) => {
             (response === undefined).should.equal(false);
@@ -118,7 +119,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, { headers: { 'x-px-johnny': '1' }, body: 'hello buddy' });
         });
-        req.originalUrl = '/_APP_ID/xhr/something';
+        req.path = '/_APP_ID/xhr/something';
+        req.originalUrl = `${req.protocol}://${req.hostname}${req.path}`;
         req.method = 'POST';
         req.body = 'test';
         enforcer = new PxEnforcer(params, pxClient);
@@ -138,7 +140,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const reqStub = sinon.stub(request, 'get').callsFake((data, config, callback) => {
             callback(null, { headers: { 'x-px-johnny': '1' }, body: 'hello buddy' });
         });
-        req.originalUrl = '/_APP_ID/xhr/something';
+        req.path = '/_APP_ID/xhr/something';
+        req.originalUrl = `${req.protocol}://${req.hostname}${req.path}`;
         req.method = 'GET';
         req.body = 'test';
         enforcer = new PxEnforcer(params, pxClient);
@@ -158,7 +161,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, { headers: { 'x-px-johnny': '1' }, body: 'hello buddy' });
         });
-        req.originalUrl = '/_APP_ID/xhr/something';
+        req.path = '/_APP_ID/xhr/something';
+        req.originalUrl = `${req.protocol}://${req.hostname}${req.path}`;
         req.method = 'POST';
         req.cookies['_pxvid'] = 'abab-123';
         req.body = 'test';
@@ -179,7 +183,8 @@ describe('PX Enforcer - pxenforcer.js', () => {
         const reqStub = sinon.stub(request, 'post').callsFake((data, config, callback) => {
             callback(null, { headers: { 'x-px-johnny': '1' }, body: 'hello buddy' });
         });
-        req.originalUrl = '/_APP_ID/xhr/something';
+        req.path = '/_APP_ID/xhr/something';
+        req.originalUrl = `${req.protocol}://${req.hostname}${req.path}`;
         req.method = 'POST';
         req.body = { key: 'value', anotherKey: 'anotherValue' };
         enforcer = new PxEnforcer(params, pxClient);
