@@ -40,6 +40,9 @@ describe('PX Enforcer - pxenforcer.js', () => {
         req.ip = '1.2.3.4';
         req.hostname = 'example.com';
         req.get = (key) => {
+            if (key === 'host') {
+                return req.host;
+            }
             return req.headers[key] || '';
         };
 
