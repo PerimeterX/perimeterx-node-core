@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [x.x.x] - xxx-x-x
+
+### Added
+- Support for url decode reserved characters feature
+
 ## [3.13.0] - 2023-12-21
 
 ### Added
