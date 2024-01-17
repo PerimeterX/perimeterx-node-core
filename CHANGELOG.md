@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Removed support for header-based logger feature
 
+## [3.15.0] - 2024-01-17 (removed)
+
 ## [3.14.0] - 2024-01-11
 
 ### Added
