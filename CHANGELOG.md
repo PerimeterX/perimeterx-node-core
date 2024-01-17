@@ -6,10 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [3.15.0] - 2024-01-17
+## [3.15.1] - 2024-01-17
 
 ### Added
 - Removed support for header-based logger feature
+
+## [3.15.0] - 2024-01-17 (removed)
 
 ## [3.14.0] - 2024-01-11
 
