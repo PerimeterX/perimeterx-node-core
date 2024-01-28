@@ -1,7 +1,7 @@
 {
-    "name": "perimeterx-node-core",
-    "version": "3.15.1",
-    "description": "PerimeterX NodeJS shared core for various applications to monitor and block traffic according to PerimeterX risk score",
+    "name": "bdexpress-enforcer-core",
+    "version": "1.0.0",
+    "description": "PerimeterX NodeJS shared core customized for BD Express",
     "main": "index.js",
     "scripts": {
         "test": "mocha",
@@ -14,7 +14,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/PerimeterX/perimeterx-node-core.git"
+        "url": "git+https://github.com/PerimeterX/bdexpress-enforcer-core.git"
     },
     "author": "Johnny Tordgeman",
     "license": "ISC",
